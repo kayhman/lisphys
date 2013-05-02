@@ -2,6 +2,7 @@
   ((x :accessor vector3-x :initarg :x :initform 0.)
    (y :accessor vector3-y :initarg :y :initform 0.)
    (z :accessor vector3-z :initarg :z :initform 0.)
+   (symb :reader vector3-symb :initform 'vector3 :allocation :class)
    (add :accessor vector3-add :initarg :add :initform #'+ :allocation :class)
    (sub :accessor vector3-sub :initarg :sub :initform #'- :allocation :class)
    (mult :accessor vector3-mult :initarg :mult :initform #'* :allocation :class)
@@ -16,9 +17,9 @@
 
 (defmethod .+ ((va vector3) (vb vector3))
 "Add two vector3."
-  (with-slots (x y z (.+ add)) va
+  (with-slots (x y z (.+ add) symb) va
     (with-slots ((tx x) (ty y) z(tz z)) vb
-      (make-instance 'vector3 
+      (make-instance symb 
 		     :x (funcall .+ x tx) 
 		     :y (funcall .+ y ty) 
 		     :z (funcall .+ z tz) )
@@ -28,9 +29,9 @@
 
 (defmethod .- ((va vector3) (vb vector3))
 "Substract vector3 vb from va."
-  (with-slots (x y z (.- sub)) va
+  (with-slots (x y z (.- sub) symb) va
     (with-slots ((tx x) (ty y) z(tz z)) vb
-      (make-instance 'vector3 
+      (make-instance symb 
 		     :x (funcall .- x tx)
 		     :y (funcall .- y ty) 
 		     :z (funcall .- z tz) )
@@ -60,9 +61,9 @@
 
 (defmethod cross ((va vector3) (vb vector3))
 "Compute the cross product of two vector3"
-  (with-slots ((u1 x) (u2 y) (u3 z) (.- add) (.* mult)) va
+  (with-slots ((u1 x) (u2 y) (u3 z) (.- add) (.* mult) symb) va
     (with-slots ((v1 x) (v2 y) (v3 z)) vb
-      (make-instance 'vector3 
+      (make-instance symb 
 		     :x (funcall .- (funcall .* u2 v3) (funcall .* u3 v2)) 
 		     :y (funcall .- (funcall .* u3 v1) (funcall .* u1 v3)) 
 		     :z (funcall .- (funcall .* u1 v2) (funcall .* u2 v1)) )
@@ -86,9 +87,9 @@
 
 (defmethod normalize ((v vector3))
   "Compute the norm of a vector3"
-  (with-slots (x y z (./ div)) v
+  (with-slots (x y z (./ div) symb) v
     (let ((nrm (norm v)))
-      (make-instance 'vector3
+      (make-instance symb
 		     :x (funcall ./ x nrm)
 		     :y (funcall ./ y nrm)
 		     :z (funcall ./ z nrm) )

@@ -1,5 +1,6 @@
 (defclass vector3ad (vector3)
-  ((add :initform #'ad-+ :allocation :class)
+  ((symb :initform 'vector3ad :allocation :class)
+   (add :initform #'ad-+ :allocation :class)
    (sub :initform #'ad-- :allocation :class)
    (mult :initform #'ad-* :allocation :class)
    (div :initform #'ad-/ :allocation :class)
@@ -14,3 +15,9 @@
 (.- e1a e2a)
 (vector3-x (.- e1a e2a))
 (vector3-x (cross e1a e2a))
+
+(vector3-x (.- e2a e1a))
+(cross e1a e2a)
+(norm (cross e1a e2a))
+(class-of (cross e1a e2a))
+
