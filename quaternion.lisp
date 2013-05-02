@@ -73,16 +73,6 @@
 (setf e1 (make-instance 'vector3 :x 1.0 :y 0. :z 0. ))
 (setf q1 (make-instance 'quaternion :x 0.0 :y 1. :z 0. :w 0. ))
 
-(defmethod .- ((va vector3) (vb vector3))
-"Substract vector3 vb from va."
-  (with-slots (x y z) va
-    (with-slots ((tx x) (ty y) z(tz z)) vb
-      (make-instance 'vector3 :x (- x tx) :y (- y ty) :z (- z tz) )
-      )
-  )
-
-    )
-
 (setq e1 (make-instance 'vector3 :x 1.0 :y 0. :z 0. ))
 (setq e2 (make-instance 'vector3 :x 0.0 :y 1. :z 0. ))
 (setq e3 (make-instance 'vector3 :x 0.0 :y 0. :z 1. ))

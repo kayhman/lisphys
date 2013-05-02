@@ -29,7 +29,10 @@
 "Substract vector3 vb from va."
   (with-slots (x y z (.- sub)) va
     (with-slots ((tx x) (ty y) z(tz z)) vb
-      (make-instance 'vector3 :x (funcall .- x tx) :y (funcall .- y ty) :z (funcall .- z tz) )
+      (make-instance 'vector3 
+		     :x (funcall .- x tx)
+		     :y (funcall .- y ty) 
+		     :z (funcall .- z tz) )
       )
     )
   )

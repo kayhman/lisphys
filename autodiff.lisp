@@ -26,34 +26,34 @@
 
 (defun ad-+ (x y)
 (list 
-(+ (first x) (first y))  (+ (second x) (second y))
+(+ (val x) (val y))  (+ (dot x) (dot y))
 )
 )
 
 (defun ad-- (x y)
 (list 
-(- (first x) (first y))  (- (second x) (second y))
+(- (val x) (val y))  (- (dot x) (dot y))
 )
 )
 
 (defun ad-* (x y)
 (list 
-(* (first x) (first y))  (+ (* (first x) (second y)) (* (first y) (second x)))
+(* (val x) (val y))  (+ (* (val x) (dot y)) (* (val y) (dot x)))
 )
 )
 
 
-(defun ad-sin (x)
-(list 
-(sin (first x))  ( * (cos (first x))  (second x))
-)
-)
+;;(defun ad-sin (x)
+;;(list 
+;;(sin (first x))  ( * (cos (first x))  (second x))
+;;)
+;;)
 
-(defun ad-cos (x)
-(list 
-(cos (first x))  (- ( * (sin (first x))  (second x)))
-)
-)
+;;(defun ad-cos (x)
+;;(list 
+;;(cos (first x))  (- ( * (sin (first x))  (second x)))
+;;)
+;;)
 
 (defun adify-atom (x)
 (case x
@@ -64,10 +64,6 @@
   (otherwise `(list ,x 0))
   )
 )
-
-(adify-atom '+)
-(adify-atom 1)
-(adify-atom 'cos)
 
 (defun adify-exp (expr)
 (labels ((rec (x) 
@@ -82,32 +78,8 @@
   (mapcar #'rec expr))
 )
 
-(adify-exp '(* 1 (+ 2 3)))
-
 (defmacro adify (name var-list (&body exp))
   `(defun ,name ,var-list
       ,(adify-exp exp)
      )
   )
-
-
-(adify p (x y z) (+ x y))
-
-(macroexpand-1 '(adify p (x y z) (+ x y)))
-
-
-(macroexpand-1 '(adify p (x y z) (+ x y)) )
-
-(macroexpand-1 '(adify p (x y z) (+ x (+ y z)) ))
-
-(adify p (x y z) (* x (+ y (+ z (cos x)))) )
-
-
-(macroexpand-1 '(adify p (x y z) (* x (+ y (+ z (cos x)))) ))
-
-(macroexpand-1 '(adify p (x y z) (defun (a b ) (+ a ) ) ) )
-
-(p 1 2 0)
-
-(ad-+ '(1 2) '(3 4))
-(ad-* '(1 2) '(3 4))
