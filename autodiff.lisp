@@ -2,8 +2,7 @@
 (first x)
 )
 
-
-(defun dot (x)
+(defun der (x)
 (second x)
 )
 
@@ -18,30 +17,42 @@
      )
   )
 
-(adify-function cos (* (dot x) (- (sin (val x)) )))
+(adify-function cos (* (der x) (- (sin (val x)) )))
 
-(adify-function sin (* (dot x) (cos (val x)) ))
+(adify-function sin (* (der x) (cos (val x)) ))
+
+(adify-function sqrt (/ (der x) (* 2.0 (sqrt (val x))) ))
 
 (macroexpand-1 '(adify-function cos (* (second x) (sin (first x)) )))
 
-(defun ad-+ (x y)
-(list 
-(+ (val x) (val y))  (+ (dot x) (dot y))
-)
-)
+(defun ad-+ (&rest x)
+  (list 
+   (reduce #'+ (mapcar #'val x) )
+   (reduce #'+ (mapcar #'der x) )
+   )
+  )
 
-(defun ad-- (x y)
-(list 
-(- (val x) (val y))  (- (dot x) (dot y))
-)
-)
+(defun ad-- (&rest x)
+  (list 
+   (reduce #'- (mapcar #'val x) )
+   (reduce #'- (mapcar #'der x) )
+   )
+  )
 
 (defun ad-* (x y)
 (list 
-(* (val x) (val y))  (+ (* (val x) (dot y)) (* (val y) (dot x)))
+(* (val x) (val y))  (+ (* (val x) (der y)) (* (val y) (der x)))
 )
 )
 
+(defun ad-/ (x y)
+  (list 
+   (let ((y2 (* y y)))
+     (/ (val x) (val y))
+     (/ (- (* (der x) (val y)) (* (val x) (der y))) y2)
+     )
+   )
+  )
 
 ;;(defun ad-sin (x)
 ;;(list 
@@ -61,6 +72,7 @@
   (* 'ad-*)
   (cos 'ad-cos)
   (sin 'ad-sin)
+  (sqrt 'ad-sqrt)
   (otherwise `(list ,x 0))
   )
 )

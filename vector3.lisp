@@ -5,7 +5,8 @@
    (add :accessor vector3-add :initarg :add :initform #'+ :allocation :class)
    (sub :accessor vector3-sub :initarg :sub :initform #'- :allocation :class)
    (mult :accessor vector3-mult :initarg :mult :initform #'* :allocation :class)
-   (div :accessor vector3-div :initarg :div :initform #'/ :allocation :class))
+   (div :accessor vector3-div :initarg :div :initform #'/ :allocation :class)
+   (sqrt :accessor vector3-sqrt :initarg :sqrt :initform #'sqrt :allocation :class))
 )
 
 (defclass vector3p (vector3)
@@ -78,7 +79,9 @@
 
 (defmethod norm ((v vector3))
 "Compute the norm of a vector3"
-  (sqrt (norm2 v) )
+(with-slots ((.sqrt sqrt)) v
+    (funcall .sqrt (norm2 v) )
+  )
 )
 
 (defmethod normalize ((v vector3))

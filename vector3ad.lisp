@@ -1,7 +1,9 @@
 (defclass vector3ad (vector3)
   ((add :initform #'ad-+ :allocation :class)
    (sub :initform #'ad-- :allocation :class)
-   (mult :initform #'ad-* :allocation :class))
+   (mult :initform #'ad-* :allocation :class)
+   (div :initform #'ad-/ :allocation :class)
+   (sqrt :initform #'ad-sqrt :allocation :class))
 )
 
 (setq e1a (make-instance 'vector3ad :x '(1 0) :y '(0 0) :z '(0 0)) )
