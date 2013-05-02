@@ -30,6 +30,12 @@
 )
 )
 
+(defun ad-- (x y)
+(list 
+(- (first x) (first y))  (- (second x) (second y))
+)
+)
+
 (defun ad-* (x y)
 (list 
 (* (first x) (first y))  (+ (* (first x) (second y)) (* (first y) (second x)))
