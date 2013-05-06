@@ -10,5 +10,7 @@
                (:file "math")
                (:file "vector3")
                (:file "vector3ad")
+               (:file "quaternion")
+               (:file "quaternionad")
                (:file "lisphys")))
 
