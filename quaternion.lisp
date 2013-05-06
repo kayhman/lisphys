@@ -1,3 +1,5 @@
+(in-package #:lisphys)
+
 (defclass quaternion (math)
   ((x :accessor quat-x :initarg :x)
    (y :accessor quat-y :initarg :y)
