@@ -1,41 +1,43 @@
-(defclass quaternion ()
+(defclass quaternion (math)
   ((x :accessor quat-x :initarg :x)
    (y :accessor quat-y :initarg :y)
    (z :accessor quat-z :initarg :z)
-   (w :accessor quat-w :initarg :w))
+   (w :accessor quat-w :initarg :w)
+   (symb :reader quat-symb :initform 'quaternion :allocation :class))
 )
 
 (setf q (make-instance 'quaternion :x 0. :y 0. :z 0. :w 1.))
 
 (defmethod norm2 ((q quaternion))
 "Compute the squared norm of a quaternion"
-  (with-slots (x y z w) q
-    (+ (* x x) (* y y) (* z z) (* w w) )
+  (with-slots (x y z w (.+ add) (.* mult)) q
+    (.+ (.* x x) (.* y y) (.* z z) (.* w w) )
       )
   )
 
 (defmethod norm ((q quaternion))
-"Compute the norm of a quaternion"
-  (sqrt (norm2 q) )
-)
+  "Compute the norm of a quaternion"
+  (with-slots ((.sqrt sqrt)) q
+    (.sqrt (norm2 q) ))
+  )
 
 (defmethod conj ((q quaternion))
 "Compute the conjugate of a quaternion"
-  (with-slots (x y z w ) q
-    (make-instance 'quaternion :x (- x) :y (- y) :z (- z) :w w)
+  (with-slots (x y z w symb) q
+    (make-instance symb :x (- x) :y (- y) :z (- z) :w w)
     )
   )
 
 
 (defmethod .* ((qa quaternion) (qb quaternion))
 "Multiply two quaternions"
-  (with-slots ((qax x) (qay y) (qaz z) (qaw w)) qa
+  (with-slots ((qax x) (qay y) (qaz z) (qaw w) symb (.+ add) (.* mult) (.- sub)) qa
     (with-slots ((qbx x) (qby y) (qbz z) (qbw w)) qb
-      (make-instance 'quaternion 
-		     :x (+ (* qaw qbx) (* qax qbw) (* qay qbz) (- (* qaz qby)) ) 
-		     :y (+ (* qaw qby) (* qay qbw) (* qaz qbx) (- (* qax qbz)) ) 
-		     :z (+ (* qaw qbz) (* qaz qbw) (* qax qby) (- (* qay qbx)) )
-		     :w (+ (* qaw qbw) (* qax qbx) (* qay qby) (* qaz qbz)) )
+      (make-instance symb 
+		     :x (.+ (.* qaw qbx) (.* qax qbw) (.* qay qbz) (.- (.* qaz qby)) ) 
+		     :y (.+ (.* qaw qby) (.* qay qbw) (.* qaz qbx) (.- (.* qax qbz)) ) 
+		     :z (.+ (.* qaw qbz) (.* qaz qbw) (.* qax qby) (.- (.* qay qbx)) )
+		     :w (.+ (.* qaw qbw) (.* qax qbx) (.* qay qby) (.* qaz qbz)) )
       )
     )
   )
@@ -43,12 +45,12 @@
 
 (defmethod .* ((q quaternion) (v vector3))
 "Multiply a vector vy a quaternion"
-  (with-slots ((qx x) (qy y) (qz z) (qw w)) q
-    (with-slots ((vx x) (vy y) (vz z)) v
+  (with-slots ((qx x) (qy y) (qz z) (qw w) (symq symb) ) q
+    (with-slots ((vx x) (vy y) (vz z) (symbv symb)) v
       (let* ((qconj (conj q)) 
-	    (qv (make-instance 'quaternion :x vx :y vy :z vz :w 0.))
+	    (qv (make-instance symbq :x vx :y vy :z vz :w 0.))
 	    (rqv (.* q (.* qv qconj))) )
-       (make-instance 'vector3
+       (make-instance symv
 		     :x (quat-x rqv)  
 		     :y (quat-y rqv)  
 		     :z (quat-z rqv) ))
@@ -57,14 +59,15 @@
   )
 
 (defmethod from-axis ((v vector3) (a float))
-  (let ((sinA (sin a))
-	(vn (normalize v)) )
-    (with-slots (x y z) vn
+  (with-slots (x y z (.* mult) (.cos cos) (.sin sin)) vn
+    (let ((sinA (.sin a))
+	  (vn (normalize v)) )
+    
       (make-instance 'quaternion
-		     :x (* x sinA)
-		     :y (* y sinA)
-		     :z (* z sinA)
-		     :w (cos a) ) 
+		     :x (.* x sinA)
+		     :y (.* y sinA)
+		     :z (.* z sinA)
+		     :w (.cos a) ) 
       )
     )
   )
