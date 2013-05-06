@@ -1,14 +1,9 @@
-(defclass vector3 ()
+(defclass vector3 (math)
   ((x :accessor vector3-x :initarg :x :initform 0.)
    (y :accessor vector3-y :initarg :y :initform 0.)
    (z :accessor vector3-z :initarg :z :initform 0.)
-   (symb :reader vector3-symb :initform 'vector3 :allocation :class)
-   (add :accessor vector3-add :initarg :add :initform #'+ :allocation :class)
-   (sub :accessor vector3-sub :initarg :sub :initform #'- :allocation :class)
-   (mult :accessor vector3-mult :initarg :mult :initform #'* :allocation :class)
-   (div :accessor vector3-div :initarg :div :initform #'/ :allocation :class)
-   (sqrt :accessor vector3-sqrt :initarg :sqrt :initform #'sqrt :allocation :class))
-)
+   (symb :reader vector3-symb :initform 'vector3 :allocation :class))
+  )
 
 (defclass vector3p (vector3)
   ((add :initform #'- :allocation :class)
@@ -76,7 +71,7 @@
   (with-slots (x y z) v
     (dot v v)
       )
-)
+  )
 
 (defmethod norm ((v vector3))
 "Compute the norm of a vector3"
