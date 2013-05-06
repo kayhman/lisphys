@@ -1,3 +1,5 @@
+(in-package #:lisphys)
+
 (defclass math ()
   ((add :accessor math-add :initarg :add :initform #'+ :allocation :class)
    (sub :accessor math-sub :initarg :sub :initform #'- :allocation :class)
