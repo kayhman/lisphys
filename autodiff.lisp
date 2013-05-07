@@ -75,7 +75,7 @@
   (cos 'ad-cos)
   (sin 'ad-sin)
   (sqrt 'ad-sqrt)
-  (otherwise `(list ,x 0))
+  (otherwise `,x)
   )
 )
 
@@ -97,3 +97,26 @@
       ,(adify-exp exp)
      )
   )
+
+
+(defun create-phase (x)
+  (list (first x) `'(,(second x) 0)))
+
+(defmacro d-first (fn bindings)
+  `(let ,(append (list `(,(caar bindings) '(,(second (car bindings)) 1))) (mapcar #'create-phase (cdr bindings)))
+    (,fn ,@(mapcar #'first bindings))))
+
+(adify p (x y z) (* x (* z y)))
+
+(p '(3 1) '(2 0) '(1 0)) ;; d p / dx | x == 3
+
+;;(dx p ((x 3) (y 2) (z 1)))
+
+
+(macroexpand-1 '(d-first p ((x 3) (y 2) (z 1))))
+
+(macroexpand-1 '(dx p ((y 3) (x 2) (z 1) (w 3))))
+
+(dx p ((x 3) (y 2) (z 1)))
+
+(dx p ((y 2) (x 3) (z 1)))
