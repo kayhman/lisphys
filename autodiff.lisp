@@ -49,7 +49,7 @@
 
 (defun ad-/ (x y)
   (list 
-   (let ((y2 (* y y)))
+   (let ((y2 (* (first y) (first y))))
      (/ (val x) (val y))
      (/ (- (* (der x) (val y)) (* (val x) (der y))) y2)
      )
