@@ -18,3 +18,4 @@
 (norm (cross e1a e2a))
 (class-of (cross e1a e2a))
 
+(normalize e2a)
