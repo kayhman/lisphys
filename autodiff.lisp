@@ -114,6 +114,4 @@
 
 (macroexpand-1 '(dx p ((y 3) (x 2) (z 1) (w 3))))
 
-(d-first p ((x 3) (y 2) (z 1)))
 
-(d-first p ((y 2) (x 3) (z 1)))

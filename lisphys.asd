@@ -8,6 +8,7 @@
   :depends-on (#:clunit)
   :components ((:file "package")
                (:file "autodiff")
+               (:file "autodiff-test")
                (:file "math")
                (:file "vector3")
                (:file "vector3ad")
