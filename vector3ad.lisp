@@ -1,6 +1,6 @@
 (in-package #:lisphys)
 
-(defclass vector3ad (vector3 math-ad)
+(defclass vector3ad (math-ad vector3)
   ((symb :initform 'vector3ad :allocation :class))
   )
 
