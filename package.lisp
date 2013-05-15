@@ -1,5 +1,5 @@
 ;;;; package.lisp
 
 (defpackage #:lisphys
-  (:use #:cl))
-
+  (:use #:cl)
+  (:shadowing-import-from #:clunit))

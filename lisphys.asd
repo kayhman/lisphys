@@ -5,6 +5,7 @@
   :description "Describe lisphys here"
   :author "Guillaume <guillaume.saupin@gmail.com>"
   :license "Specify license here"
+  :depends-on (#:clunit)
   :components ((:file "package")
                (:file "autodiff")
                (:file "math")
