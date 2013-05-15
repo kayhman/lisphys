@@ -60,19 +60,16 @@
     )
   )
 
-(defmethod from-axis ((v vector3) (a float))
-  (with-slots (x y z (.* mult) (.cos cos) (.sin sin)) vn
-    (let ((sinA (.sin a))
+(defmethod from-axis ((v vector3) a )
+  (with-slots ((.* mult) (.cos cos) (.sin sin)) v
+    (let ((sinA (funcall .sin a))
 	  (vn (normalize v)) )
-    
-      (make-instance 'quaternion
-		     :x (.* x sinA)
-		     :y (.* y sinA)
-		     :z (.* z sinA)
-		     :w (.cos a) ) 
-      )
-    )
-  )
+      (with-slots (x y z) vn
+	(make-instance 'quaternion
+		       :x (funcall .* x sinA)
+		       :y (funcall .* y sinA)
+		       :z (funcall .* z sinA)
+		       :w (funcall .cos a) ) ))))
 
 
 (setf e1 (make-instance 'vector3 :x 1.0 :y 0. :z 0. ))
