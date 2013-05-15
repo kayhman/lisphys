@@ -5,3 +5,6 @@
   )
 
 (setf q1 (make-instance 'quaternionad :x '(0. 0.) :y '(1. 0.) :z '(0. 0.) :w '(0. 0.)))
+
+
+(from-axis e1a '(2.0 0))
