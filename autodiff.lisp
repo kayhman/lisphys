@@ -48,13 +48,10 @@
 )
 
 (defun ad-/ (x y)
-  (list 
-   (let ((y2 (* (first y) (first y))))
+  (let ((y2 (* (first y) (first y))))
+    (list 
      (/ (val x) (val y))
-     (/ (- (* (der x) (val y)) (* (val x) (der y))) y2)
-     )
-   )
-  )
+     (/ (- (* (der x) (val y)) (* (val x) (der y))) y2) )))
 
 ;;(defun ad-sin (x)
 ;;(list 
