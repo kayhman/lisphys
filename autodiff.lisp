@@ -36,8 +36,8 @@
 
 (defun ad-- (&rest x)
   (list 
-   (reduce #'- (mapcar #'val x) )
-   (reduce #'- (mapcar #'der x) )
+   (reduce #'- (append '(0) (mapcar #'val x) ))
+   (reduce #'- (append '(0) (mapcar #'der x) ))
    )
   )
 
