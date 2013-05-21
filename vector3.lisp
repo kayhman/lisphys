@@ -36,6 +36,13 @@
     )
   )
 
+(defmethod .* ((va vector3) a)
+"Multiply vector3 va by scalar a."
+  (with-slots (x y z (.* mult) symb) va
+      (make-instance symb 
+		     :x (funcall .* x a)
+		     :y (funcall .* y a) 
+		     :z (funcall .* z a ))))
 
 ;;(setq v (make-instance 'vector3 ))
 ;;(funcall (vector3-add v) 1 2 3)
