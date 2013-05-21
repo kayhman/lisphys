@@ -15,7 +15,7 @@
 (defmethod .+ ((va vector3) (vb vector3))
 "Add two vector3."
   (with-slots (x y z (.+ add) symb) va
-    (with-slots ((tx x) (ty y) z(tz z)) vb
+    (with-slots ((tx x) (ty y) (tz z)) vb
       (make-instance symb 
 		     :x (funcall .+ x tx) 
 		     :y (funcall .+ y ty) 
@@ -27,7 +27,7 @@
 (defmethod .- ((va vector3) (vb vector3))
 "Substract vector3 vb from va."
   (with-slots (x y z (.- sub) symb) va
-    (with-slots ((tx x) (ty y) z(tz z)) vb
+    (with-slots ((tx x) (ty y) (tz z)) vb
       (make-instance symb 
 		     :x (funcall .- x tx)
 		     :y (funcall .- y ty) 
@@ -35,6 +35,7 @@
       )
     )
   )
+
 
 ;;(setq v (make-instance 'vector3 ))
 ;;(funcall (vector3-add v) 1 2 3)
