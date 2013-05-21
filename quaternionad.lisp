@@ -30,6 +30,12 @@
      (.* e1a q2)
     ))
 
+(defun pos-quat3 (q1 q2)
+    (.+ 
+     (.* e1a q1)
+     (.* e2a q2)
+    ))
+
 (type-of q1a)
 
 (conj q1a)
@@ -43,6 +49,17 @@
 
 (.* (from-axis e1a '(1 2)) e1a)
 
-(vector3-x (d-first pos-quat ((q1 0.) (q2 0.))))
-(vector3-y (d-first pos-quat ((q1 0.) (q2 0.))))
-(vector3-z (d-first pos-quat2 ((q1 0.) (q2 0.))))
+(vector3-x (d-var q1 pos-quat2 ((q1 3.1416) (q2 0.))))
+(vector3-y (d-var q1 pos-quat2 ((q1 3.1416) (q2 0.))))
+(vector3-z (d-var q1 pos-quat2 ((q1 3.1416) (q2 0.))))
+
+
+(macroexpand-1 '(d-var q2 pos-quat2 ((q1 0.) (q2 0.3) )))
+
+
+(vector3-x (pos-quat2 '(0. 0.) '(0.3 1.0)))
+
+
+(vector3-x (d-var q2 pos-quat2 ((q1 0.) (q2 0.3) )))
+(vector3-y (d-var q2 pos-quat2 ((q1 0.) (q2 0.3) )))
+(vector3-z (d-var q2 pos-quat2 ((q1 0.) (q2 0.3) )))
