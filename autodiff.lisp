@@ -101,16 +101,18 @@
 
 
 (defun create-phase (x)
-  (list (first x) `'(,(second x) 0)))
+  (list (first x) `'(,(second x) 0.)))
 
-(defmacro d-first (fn bindings)
-  `(let ,(append (list `(,(caar bindings) '(,(second (car bindings)) 1))) (mapcar #'create-phase (cdr bindings)))
+(defmacro d-var (var fn bindings)
+  `(let ,(mapcar #'(lambda (x) 
+		  (if (string= var (first x))
+		      (list (first x) `'(,(second x) 1.0))
+		      (create-phase x)))
+		  bindings
+		  )
     (,fn ,@(mapcar #'first bindings))))
 
 
 
-(macroexpand-1 '(d-first p ((x 3) (y 2) (z 1))))
-
-(macroexpand-1 '(dx p ((y 3) (x 2) (z 1) (w 3))))
-
+(macroexpand-1 '(d-var z p ((x 3) (y 2) (z 1))))
 
