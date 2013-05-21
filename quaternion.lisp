@@ -37,7 +37,7 @@
 		     :x (funcall .+ (funcall .* qaw qbx) (funcall .* qax qbw) (funcall .* qay qbz) (funcall .- (funcall .* qaz qby)) ) 
 		     :y (funcall .+ (funcall .* qaw qby) (funcall .* qay qbw) (funcall .* qaz qbx) (funcall .- (funcall .* qax qbz)) ) 
 		     :z (funcall .+ (funcall .* qaw qbz) (funcall .* qaz qbw) (funcall .* qax qby) (funcall .- (funcall .* qay qbx)) )
-		     :w (funcall .+ (funcall .* qaw qbw) (funcall .* qax qbx) (funcall .* qay qby) (funcall .* qaz qbz)) ))))
+		     :w (funcall .- (funcall .* qaw qbw) (funcall .* qax qbx) (funcall .* qay qby) (funcall .* qaz qbz)) ))))
 
 
 (defmethod .* ((q quaternion) (v vector3))
