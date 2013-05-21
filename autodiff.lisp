@@ -86,14 +86,18 @@
 		   )
 	       )
 	   ))
-  (mapcar #'rec expr))
-)
+  (mapcar #'rec expr)))
 
 (defmacro adify (name var-list (&body exp))
   `(defun ,name ,var-list
-      ,(adify-exp exp)
-     )
-  )
+      ,(adify-exp exp)))
+
+(adify p (x y z) (* x (* z y)))
+
+(p '(3 1) '(2 0) '(1 0)) ;; d p / dx | x == 3
+
+;;(dx p ((x 3) (y 2) (z 1)))
+
 
 
 (defun create-phase (x)
@@ -103,11 +107,6 @@
   `(let ,(append (list `(,(caar bindings) '(,(second (car bindings)) 1))) (mapcar #'create-phase (cdr bindings)))
     (,fn ,@(mapcar #'first bindings))))
 
-(adify p (x y z) (* x (* z y)))
-
-(p '(3 1) '(2 0) '(1 0)) ;; d p / dx | x == 3
-
-;;(dx p ((x 3) (y 2) (z 1)))
 
 
 (macroexpand-1 '(d-first p ((x 3) (y 2) (z 1))))
