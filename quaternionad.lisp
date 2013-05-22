@@ -4,6 +4,13 @@
   ((symb :initform 'quaternionad :allocation :class))
   )
 
+(defmethod initialize-instance :after ( (q quaternionad) &key x y z w)
+	   (progn 
+	     (if (numberp x) (setf (quat-x q ) `(,x 0.)))
+	     (if (numberp y) (setf (quat-y q ) `(,y 0.)))
+	     (if (numberp z) (setf (quat-z q ) `(,z 0.)))
+	     (if (numberp w) (setf (quat-w q ) `(,w 0.)))))
+
 (setf q1a (make-instance 'quaternionad :x '(0. 0.) :y '(1. 0.) :z '(0. 0.) :w '(0. 0.)))
 
 
@@ -20,15 +27,14 @@
 (vector3-y e2a)
 
 (defun pos-quat (q1 q2)
-     (.* (from-axis e1a q1) (make-instance 'vector3ad :x '(1 0) :y '(.7 0) :z '(.6 0)))
-    )
+     (.* (from-axis e1a q1) (make-instance 'vector3ad :x 1. :y .7 :z '.6)))
 
 
 (defun pos-quat2 (q1 q2)
-    (.+ 
-     (.* (from-axis e1a q1) (make-instance 'vector3ad :x '(1 0) :y '(.6 0) :z '(.7 0)))
-     (.* e1a q2)
-    ))
+  (.+ 
+   (.* (from-axis e1a q1) (make-instance 'vector3ad :x 1 :y .6 :z .7))
+   (.* e1a q2)
+   ))
 
 (defun pos-quat3 (q1 q2)
     (.+ 
