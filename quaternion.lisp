@@ -45,7 +45,7 @@
   (with-slots ((qx x) (qy y) (qz z) (qw w) (symbq symb) ) q
     (with-slots ((vx x) (vy y) (vz z) (symbv symb)) v
       (let* ((qconj (conj q)) 
-	    (qv (make-instance symbq :x vx :y vy :z vz :w '(0. 0.)))
+	    (qv (make-instance symbq :x vx :y vy :z vz :w 0.))
 	    (rqv (.* q (.* qv qconj))) )
        (make-instance symbv
 		     :x (quat-x rqv)  
