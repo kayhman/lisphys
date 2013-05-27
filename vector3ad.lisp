@@ -1,8 +1,7 @@
 (in-package #:lisphys)
 
 (defclass vector3ad (math-ad vector3)
-  ((symb :initform 'vector3ad :allocation :class))
-  )
+  ())
 
 (defmethod initialize-instance :after ( (v vector3ad) &key x y z )
 	   (progn 

@@ -1,8 +1,7 @@
 (in-package #:lisphys)
 
 (defclass quaternionad (math-ad quaternion)
-  ((symb :initform 'quaternionad :allocation :class))
-  )
+  ())
 
 (defmethod initialize-instance :after ( (q quaternionad) &key x y z w)
 	   (progn 

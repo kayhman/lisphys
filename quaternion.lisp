@@ -4,9 +4,7 @@
   ((x :accessor quat-x :initarg :x)
    (y :accessor quat-y :initarg :y)
    (z :accessor quat-z :initarg :z)
-   (w :accessor quat-w :initarg :w)
-   (symb :reader quat-symb :initform 'quaternion :allocation :class))
-)
+   (w :accessor quat-w :initarg :w)))
 
 (setf q (make-instance 'quaternion :x 0. :y 0. :z 0. :w 1.))
 
@@ -25,15 +23,15 @@
 
 (defmethod conj ((q quaternion))
 "Compute the conjugate of a quaternion"
-  (with-slots (x y z w symb (.- sub)) q
-    (make-instance symb :x (funcall .- x) :y (funcall .- y) :z (funcall .- z) :w w)))
+  (with-slots (x y z w (.- sub)) q
+    (make-instance (type-of q) :x (funcall .- x) :y (funcall .- y) :z (funcall .- z) :w w)))
 
 
 (defmethod .* ((qa quaternion) (qb quaternion))
 "Multiply two quaternions"
-  (with-slots ((qax x) (qay y) (qaz z) (qaw w) symb (.+ add) (.* mult) (.- sub)) qa
+  (with-slots ((qax x) (qay y) (qaz z) (qaw w) (.+ add) (.* mult) (.- sub)) qa
     (with-slots ((qbx x) (qby y) (qbz z) (qbw w)) qb
-      (make-instance symb 
+      (make-instance (type-of qa) 
 		     :x (funcall .+ (funcall .* qaw qbx) (funcall .* qax qbw) (funcall .* qay qbz) (funcall .- (funcall .* qaz qby)) ) 
 		     :y (funcall .+ (funcall .* qaw qby) (funcall .* qay qbw) (funcall .* qaz qbx) (funcall .- (funcall .* qax qbz)) ) 
 		     :z (funcall .+ (funcall .* qaw qbz) (funcall .* qaz qbw) (funcall .* qax qby) (funcall .- (funcall .* qay qbx)) )
@@ -42,12 +40,12 @@
 
 (defmethod .* ((q quaternion) (v vector3))
 "Multiply a vector vy a quaternion"
-  (with-slots ((qx x) (qy y) (qz z) (qw w) (symbq symb) ) q
-    (with-slots ((vx x) (vy y) (vz z) (symbv symb)) v
+  (with-slots ((qx x) (qy y) (qz z) (qw w) ) q
+    (with-slots ((vx x) (vy y) (vz z) ) v
       (let* ((qconj (conj q)) 
-	    (qv (make-instance symbq :x vx :y vy :z vz :w 0.))
+	    (qv (make-instance (type-of q) :x vx :y vy :z vz :w 0.))
 	    (rqv (.* q (.* qv qconj))) )
-       (make-instance symbv
+       (make-instance (type-of v)
 		     :x (quat-x rqv)  
 		     :y (quat-y rqv)  
 		     :z (quat-z rqv) )))))
