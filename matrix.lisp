@@ -28,3 +28,21 @@
 
 (setq m1 (make-instance 'matrix :nrows 2 :ncols 3))
 (setq m2 (make-instance 'matrix :nrows 2 :ncols 3))
+
+;; Add reader macro
+
+(defun matrix-map-transformer (stream subchar arg)  
+  (let* ((sexp (read stream t))
+	 (dim (car sexp))
+	 (val (cdr sexp)))
+    `(make-instance 'matrix 
+		    :nrows (first ',dim)
+		    :ncols (second ',dim)
+		    :val (vector ,@val)
+		    )))
+
+(set-dispatch-macro-character #\# #\m
+			      #'matrix-map-transformer)
+
+;test read-macro
+;(matrix-ncols #m((1 2) 1. 2.))
