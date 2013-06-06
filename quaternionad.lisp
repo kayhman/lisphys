@@ -25,11 +25,11 @@
 
 (vector3-y e2a)
 
-(defun pos-quat (q1 q2)
+(defun-mem pos-quat (q1 q2)
      (.* (from-axis e1a q1) (make-instance 'vector3ad :x 1. :y .7 :z '.6)))
 
 
-(defun pos-quat2 (q1 q2)
+(defun-mem pos-quat2 (q1 q2)
   (.+ 
    (.* (from-axis e1a q1) (make-instance 'vector3ad :x 1 :y .6 :z .7))
    (.* e1a q2)
