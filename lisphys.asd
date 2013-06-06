@@ -7,6 +7,7 @@
   :license "Specify license here"
   :depends-on (#:clunit)
   :components ((:file "package")
+	       (:file "memoization")
                (:file "autodiff")
                (:file "autodiff-test")
                (:file "math")
