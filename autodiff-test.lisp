@@ -10,7 +10,7 @@
 
 (deftest test-der (AutoDiffSuite)
   (assert-equal 1 (+ 1 0))
-  (assert-equal '(6 2) (d-first p ((x 3) (y 2) (z 1))))
+  (assert-equal '(6 2) (d-var x p ((x 3) (y 2) (z 1))))
   )
 
 
