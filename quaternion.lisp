@@ -39,7 +39,7 @@
 
 
 (defmethod .* ((q quaternion) (v vector3))
-"Multiply a vector vy a quaternion"
+"Multiply a vector by a quaternion"
   (with-slots ((qx x) (qy y) (qz z) (qw w) ) q
     (with-slots ((vx x) (vy y) (vz z) ) v
       (let* ((qconj (conj q)) 
@@ -50,12 +50,17 @@
 		     :y (quat-y rqv)  
 		     :z (quat-z rqv) )))))
 
+(defmacro pick-class (test-class instance name)
+  `(if (subtypep (type-of ,instance) ',test-class)
+      (values (intern (concatenate 'string (string-upcase ,name) "AD")))
+      (values (intern (string-upcase ,name)))))
+
 (defmethod from-axis ((v vector3) a )
   (with-slots ((.* mult) (.cos cos) (.sin sin)) v
-    (let ((sinA (funcall .sin (funcall .* '(0.5 0.) a)))
+    (let ((sinA (funcall .sin (funcall .* 0.5 a)))
 	  (vn (normalize v)) )
       (with-slots (x y z) vn
-	(make-instance 'quaternionad
+	(make-instance (pick-class math-ad v "quaternion")
 		       :x (funcall .* x sinA)
 		       :y (funcall .* y sinA)
 		       :z (funcall .* z sinA)

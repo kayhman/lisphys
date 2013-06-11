@@ -1,12 +1,14 @@
 (in-package #:lisphys)
 
 (defun val (x)
-(first x)
-)
+(cond
+  ((numberp x) x)
+  (t (first x))))
 
 (defun der (x)
-(second x)
-)
+(cond 
+  ((numberp x) 0.)
+  (t (second x))))
 
 (defmacro getname (x)
 `(values (intern (concatenate 'string "AD-" (string-upcase ,x))))
