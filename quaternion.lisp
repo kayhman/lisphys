@@ -64,7 +64,7 @@
 		       :x (funcall .* x sinA)
 		       :y (funcall .* y sinA)
 		       :z (funcall .* z sinA)
-		       :w (funcall .cos (funcall .* '(0.5 0.) a) )) ))))
+		       :w (funcall .cos (funcall .* 0.5 a) )) ))))
 
 
 (setf e1 (make-instance 'vector3 :x 1.0 :y 0. :z 0. ))
