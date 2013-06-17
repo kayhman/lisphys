@@ -7,4 +7,6 @@
 			  #:deftest
 			  #:run-suite
 			  #:assert-equal
-			  #:assert-true))
+			  #:assert-true)
+  (:shadowing-import-from #:alexandria 
+			  #:symbolicate))

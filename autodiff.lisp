@@ -10,13 +10,8 @@
   ((numberp x) 0.)
   (t (second x))))
 
-(defmacro getname (x)
-`(values (intern (concatenate 'string "AD-" (string-upcase ,x))))
-)
-
-
 (defmacro adify-function (name deriv)
-  `(defun ,(getname name) (x)
+  `(defun ,(symbolicate "AD-" name) (x)
      (list (,name (first x)) ,deriv)
      )
   )
@@ -26,8 +21,6 @@
 (adify-function sin (* (der x) (cos (val x)) ))
 
 (adify-function sqrt (/ (der x) (* 2.0 (sqrt (val x))) ))
-
-(macroexpand-1 '(adify-function cos (* (second x) (sin (first x)) )))
 
 (defun ad-+ (&rest x)
   (list 
@@ -55,28 +48,15 @@
      (/ (val x) (val y))
      (/ (- (* (der x) (val y)) (* (val x) (der y))) y2) )))
 
-;;(defun ad-sin (x)
-;;(list 
-;;(sin (first x))  ( * (cos (first x))  (second x))
-;;)
-;;)
-
-;;(defun ad-cos (x)
-;;(list 
-;;(cos (first x))  (- ( * (sin (first x))  (second x)))
-;;)
-;;)
-
+;;Add atom to *list* to avoid to have to add atom to the list below :
 (defun adify-atom (x)
-(case x
-  (+ 'ad-+)
-  (* 'ad-*)
-  (cos 'ad-cos)
-  (sin 'ad-sin)
-  (sqrt 'ad-sqrt)
-  (otherwise `,x)
-  )
-)
+  (case x
+    (+ 'ad-+)
+    (* 'ad-*)
+    (cos 'ad-cos)
+    (sin 'ad-sin)
+    (sqrt 'ad-sqrt)
+    (otherwise `,x)))
 
 (defun adify-exp (expr)
 (labels ((rec (x) 
@@ -94,14 +74,6 @@
   `(defun ,name ,var-list
       ,(adify-exp exp)))
 
-(adify p (x y z) (* x (* z y)))
-
-(p '(3 1) '(2 0) '(1 0)) ;; d p / dx | x == 3
-
-;;(dx p ((x 3) (y 2) (z 1)))
-
-
-
 (defun create-phase (x)
   (list (first x) `'(,(second x) 0.)))
 
@@ -113,8 +85,3 @@
 		  bindings
 		  )
     (,fn ,@(mapcar #'first bindings))))
-
-
-
-(macroexpand-1 '(d-var z p ((x 3) (y 2) (z 1))))
-

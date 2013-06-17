@@ -52,8 +52,9 @@
 
 (defmacro pick-class (test-class instance name)
   `(if (subtypep (type-of ,instance) ',test-class)
-      (values (intern (concatenate 'string (string-upcase ,name) "AD")))
-      (values (intern (string-upcase ,name)))))
+      (symbolicate ,(string-upcase name) "AD")
+      (symbolicat ,(string-upcase name))))
+
 
 (defmethod from-axis ((v vector3) a )
   (with-slots ((.* mult) (.cos cos) (.sin sin)) v
