@@ -17,5 +17,7 @@
                (:file "vector3ad")
                (:file "quaternion")
                (:file "quaternionad")
+;               (:file "twist")
+               (:file "displacement")
                (:file "lisphys")))
 
