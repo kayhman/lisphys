@@ -50,12 +50,6 @@
 		     :y (quat-y rqv)  
 		     :z (quat-z rqv) )))))
 
-(defmacro pick-class (test-class instance name)
-  `(if (subtypep (type-of ,instance) ',test-class)
-      (symbolicate ,(string-upcase name) "AD")
-      (symbolicat ,(string-upcase name))))
-
-
 (defmethod from-axis ((v vector3) a )
   (with-slots ((.* mult) (.cos cos) (.sin sin)) v
     (let ((sinA (funcall .sin (funcall .* 0.5 a)))
