@@ -36,3 +36,6 @@
 	))))
 
 
+(defmethod print-object ((tw twist) stream)
+  (with-slots (linear angular) tw
+       (format t "~a : ~%  l: ~a ~%  a: ~a ~%" (type-of tw) linear angular)))
