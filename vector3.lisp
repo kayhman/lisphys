@@ -102,7 +102,7 @@
 
 (defmethod print-object ((v vector3) stream)
   (with-slots (x y z) v
-       (format t "~a : ~,2f ~,2f ~,2f" (type-of v) x y z)))
+       (format t "~a : ~f ~f ~f ~%" (type-of v) x y z)))
 
 
 (setq e1 (make-instance 'vector3 :x 1.0 :y 0. :z 0. ))

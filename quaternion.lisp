@@ -69,7 +69,7 @@
 
 (defmethod print-object ((q quaternion) stream)
   (with-slots (x y z w) q
-       (format t "~a : ~,2f ~,2f ~,2f ~,2f" (type-of q) x y z w)))
+       (format t "~a : ~f ~f ~f ~f~%" (type-of q) x y z w)))
 
 (setf e1 (make-instance 'vector3 :x 1.0 :y 0. :z 0. ))
 (setf q1 (make-instance 'quaternion :x 0.0 :y 1. :z 0. :w 0. ))
