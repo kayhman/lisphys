@@ -34,13 +34,16 @@
     )
   )
 
-(defmethod .* ((va vector3) a)
+(defmethod .* ((va vector3) (a number))
 "Multiply vector3 va by scalar a."
   (with-slots (x y z (.* mult)) va
       (make-instance (type-of va) 
 		     :x (funcall .* x a)
 		     :y (funcall .* y a) 
 		     :z (funcall .* z a ))))
+
+(defmethod axpy ((a number) (x vector3) (y vector3))
+  (.+ (.* x a) y))
 
 ;;(setq v (make-instance 'vector3 ))
 ;;(funcall (vector3-add v) 1 2 3)
