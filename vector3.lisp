@@ -1,9 +1,9 @@
 (in-package #:lisphys)
 
 (defclass vector3 (math)
-  ((x :accessor vector3-x :initarg :x :initform 0.)
-   (y :accessor vector3-y :initarg :y :initform 0.)
-   (z :accessor vector3-z :initarg :z :initform 0.)))
+  ((x :accessor vector3-x :initarg :x :initform 0.0)
+   (y :accessor vector3-y :initarg :y :initform 0.0)
+   (z :accessor vector3-z :initarg :z :initform 0.0)))
 
 (defclass vector3p (vector3)
   ((add :initform #'- :allocation :class)
