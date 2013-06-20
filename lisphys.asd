@@ -7,7 +7,8 @@
   :license "Specify license here"
   :depends-on (#:clunit
 	       #:alexandria)
-  :components ((:file "package")
+  :components ((:file "infpre")
+	       (:file "package")
 	       (:file "memoization")
                (:file "autodiff")
                (:file "autodiff-test")

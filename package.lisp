@@ -9,4 +9,6 @@
 			  #:assert-equal
 			  #:assert-true)
   (:shadowing-import-from #:alexandria 
-			  #:symbolicate))
+			  #:symbolicate)
+  (:shadowing-import-from #:infpre 
+			  #:!!))
