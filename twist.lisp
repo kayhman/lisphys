@@ -4,7 +4,7 @@
   ((linear :accessor lin :initarg :lin)
    (angular :accessor ang :initarg :ang)))
 
-(setq tw (make-instance 'twist :lin (make-instance 'vector3) :ang (make-instance 'vector3)))
+(setq tw (make-instance 'twist :lin (make-instance 'vector3 :x 1.0 :y 2.0 :z 3.0) :ang (make-instance 'vector3 :x 1e-3)))
 
 
 (defmethod .exp ((tw twist) (eps number))
