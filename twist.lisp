@@ -13,7 +13,7 @@
     (with-slots ((!* mult)) ang
       (let* ((angNorm (val (norm ang)))
 	     (angNorm2  (val (* angNorm angNorm)))
-	     (q (make-instance 'quaternion)))
+	     (q (make-instance (pick-class math-ad ang "quaternion"))))
 	(cond 
 	  ((< angNorm2 eps)
 	   (let ((scale  (!! (1.0 + (-1.0 + 0.0125 * angNorm2) * angNorm2 / 24.0)
