@@ -100,6 +100,11 @@
     )
   )
 
+(defmethod print-object ((v vector3) stream)
+  (with-slots (x y z) v
+       (format t "~a : ~,2f ~,2f ~,2f" (type-of v) x y z)))
+
+
 (setq e1 (make-instance 'vector3 :x 1.0 :y 0. :z 0. ))
 (setq e2 (make-instance 'vector3 :x 0.0 :y 1. :z 0. ))
 (setq e3 (make-instance 'vector3 :x 0.0 :y 0. :z 1. ))
