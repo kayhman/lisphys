@@ -88,3 +88,45 @@ void cmlDisplacementBase::log (cmlTwistBase& logTwist, const double epsilon) con
 
   angular_velocity.axpy (scalarValue * angular_velocity.dotProduct(translation), point_velocity);
 }
+
+void cmlRotation3DBase::log (cmlTinyVectorBase<3>& logVector3, const double epsilon) const
+{
+  cmlTinyVectorWrap<3> vectorPart = this->getVectorPart ();
+  const double sin_thetaOn2 = vectorPart.norm (); 
+
+  if (sin_thetaOn2 > fabs (dataArray[3])) {
+    //it's better to use Arccos than Arcsin
+    if (!(dataArray[3] < 0.0)) {
+      vectorPart.scalarMult ((acos (dataArray[3]) / sin_thetaOn2) * 2.0,
+                             logVector3);
+    }
+    else {
+      vectorPart.scalarMult (((acos (dataArray[3]) - M_PI) / sin_thetaOn2) * 2.0,
+                             logVector3);
+    }
+  }
+  else {
+    if (!(dataArray[3] < 0.0)) {
+      if (sin_thetaOn2 < epsilon) {
+        const double sin_thetaOn2_2 = sin_thetaOn2 * sin_thetaOn2;
+        vectorPart.scalarMult ((1.0 + (1.0 + 0.45 * sin_thetaOn2_2) * sin_thetaOn2_2 / 6.0) * 2.0,
+                               logVector3);
+      }
+      else {
+        vectorPart.scalarMult ((asin (sin_thetaOn2) / sin_thetaOn2) * 2.0,
+                               logVector3);
+      }
+    }
+    else {
+      if (sin_thetaOn2 < epsilon) {
+        const double sin_thetaOn2_2 = sin_thetaOn2 * sin_thetaOn2;
+        vectorPart.scalarMult (-(1.0 + (1.0 + 0.45 * sin_thetaOn2_2) * sin_thetaOn2_2 / 6.0) * 2.0,
+                               logVector3);
+      }
+      else {
+        vectorPart.scalarMult (-(asin (sin_thetaOn2) / sin_thetaOn2) * 2.0,
+                               logVector3);
+      }
+    }
+  }
+}
