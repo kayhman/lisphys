@@ -56,3 +56,11 @@
 (defmethod print-object ((tw twist) stream)
   (with-slots (linear angular) tw
        (format t "~a : ~%  l: ~a ~%  a: ~a ~%" (type-of tw) linear angular)))
+
+
+(defun pos-exp (q1 q2)
+  (.exp (make-instance 'twist :lin (.* e1a q1) :ang (make-instance 'vector3ad))
+	1e-3))
+
+
+(vector3-x (d-var q2 pos-exp ((q1 0.) (q2 0.3) )))
