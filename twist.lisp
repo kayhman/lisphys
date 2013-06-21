@@ -6,7 +6,7 @@
 
 (setq tw (make-instance 'twist :lin (make-instance 'vector3 :x 1.0 :y 2.0 :z 3.0) :ang (make-instance 'vector3 :x 1e-3)))
 
-(setq twad (make-instance 'twist :lin (make-instance 'vector3ad :x 1.0 :y 2.0 :z 3.0) :ang (make-instance 'vector3ad :x 1e-3)))
+(setq twad (make-instance 'twist :lin (make-instance 'vector3ad :x 1.0 :y 2.0 :z 3.0) :ang (make-instance 'vector3ad :x 3.0)))
 
 (defmethod .exp ((tw twist) (eps number))
   (with-slots ((ang angular) (lin linear)) tw
@@ -31,8 +31,26 @@
 		 (setf trans (axpy s2 ang trans ))
 		 (values trans q))
 	       )))
-	  (else
-	   (print "hello")))))))
+	  (t
+	   (let* ((angNorm-1  (/ 1.0 angNorm))
+		 (angNorm2-1  (/ 1.0 angNorm2))
+		 (sinVal (sin (* (sin (/ angNorm 2.0)) angNorm-1)))
+		 (cosVal (cos (/ angNorm 2.0)))
+		 )
+	     (progn
+	       (setf (quat-x q) (funcall !* sinVal (vector3-x ang)))
+	       (setf (quat-y q) (funcall !* sinVal (vector3-y ang)))
+	       (setf (quat-z q) (funcall !* sinVal (vector3-z ang)))
+	       (setf (quat-w q) cosVal)
+	       (let* ((trans (cross ang lin))
+		     (s1 (* (sin angNorm) angNorm-1))
+		     (s2 (* (- 1.0 s1) (val (dot ang lin)) angNorm2-1)))
+		 (setf trans (axpy s1 lin trans))
+		 (setf trans (axpy s2 ang trans ))
+		 (values trans q))
+	       ))
+
+	   ))))))
 
 
 (defmethod print-object ((tw twist) stream)
