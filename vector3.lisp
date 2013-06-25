@@ -103,6 +103,11 @@
     )
   )
 
+(defmethod is-null ((v vector3))
+  "Return t if vectir i null. Avoid to compute the norm and its undefined derivative in 0."
+  (with-slots (x y z) v
+    (and (= (val x ) 0) (= (val y) 0) (= (val z) 0))))
+
 (defmethod print-object ((v vector3) stream)
   (with-slots (x y z) v
        (format t "~a : ~f ~f ~f ~%" (type-of v) x y z)))
