@@ -16,6 +16,7 @@
                (:file "vector3")
                (:file "vector3-test")
                (:file "vector3ad")
+               (:file "vector3ad-test")
                (:file "quaternion")
                (:file "quaternionad")
                (:file "twist")
