@@ -34,7 +34,7 @@
     )
   )
 
-(defmethod .* ((va vector3) (a number))
+(defmethod .* ((va vector3) a)
 "Multiply vector3 va by scalar a."
   (with-slots (x y z (.* mult)) va
       (make-instance (type-of va) 
