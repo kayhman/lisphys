@@ -11,7 +11,7 @@
 (defmethod .exp ((tw twist) (eps number))
   (with-slots ((ang angular) (lin linear)) tw
     (with-slots ((!* mult)) ang
-      (let* ((angNorm (val (norm ang)))
+      (let* ((angNorm (if (is-null ang ) 0. (val (norm ang))))
 	     (angNorm2  (val (* angNorm angNorm)))
 	     (q (make-instance (pick-class math-ad ang "quaternion"))))
 	(cond 
@@ -63,4 +63,5 @@
 	1e-3))
 
 
-(vector3-x (d-var q2 pos-exp ((q1 0.) (q2 0.3) )))
+(der (vector3-x (d-var q2 pos-exp ((q1 0.7) (q2 0.3) ))))
+(der (vector3-x (d-var q1 pos-exp ((q1 0.7) (q2 0.3) ))))
