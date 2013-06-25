@@ -59,7 +59,7 @@
 
 
 (defun pos-exp (q1 q2)
-  (.exp (make-instance 'twist :lin (.* e1a q1) :ang (make-instance 'vector3ad))
+  (.exp (make-instance 'twist :lin (.* (.* e1a 0.666) q1) :ang (make-instance 'vector3ad))
 	1e-3))
 
 
