@@ -14,10 +14,11 @@
                (:file "autodiff-test")
                (:file "math")
                (:file "vector3")
+               (:file "vector3-test")
                (:file "vector3ad")
                (:file "quaternion")
                (:file "quaternionad")
-;               (:file "twist")
+               (:file "twist")
                (:file "displacement")
                (:file "lisphys")))
 
