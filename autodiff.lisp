@@ -16,6 +16,7 @@
      )
   )
 
+;TODO : add domain definition.
 (adify-function cos (* (der x) (- (sin (val x)) )))
 
 (adify-function sin (* (der x) (cos (val x)) ))
