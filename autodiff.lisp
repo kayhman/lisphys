@@ -30,12 +30,14 @@
    )
   )
 
-(defun ad-- (&rest x)
-  (list 
-   (reduce #'- (append '(0) (mapcar #'val x) ))
-   (reduce #'- (append '(0) (mapcar #'der x) ))
-   )
-  )
+(defun ad-- (first &rest x)
+  (if x
+    (list 
+     (reduce #'- (cons (val first) (mapcar #'val x) ))
+     (reduce #'- (cons (der first) (mapcar #'der x) )))
+    (list 
+     (- (val first))
+     (- (der first)))))
 
 (defun ad-* (x y)
 (list 
