@@ -1,14 +1,19 @@
 (in-package #:lisphys)
 
 (defclass vector3 (math)
-  ((x :accessor vector3-x :initarg :x :initform 0.0)
-   (y :accessor vector3-y :initarg :y :initform 0.0)
-   (z :accessor vector3-z :initarg :z :initform 0.0)))
+  ((x :reader vector3-x :initarg :x :initform 0.0)
+   (y :reader vector3-y :initarg :y :initform 0.0)
+   (z :reader vector3-z :initarg :z :initform 0.0)))
 
-(defclass vector3p (vector3)
-  ((add :initform #'- :allocation :class)
-   (mult :initform #'/ :allocation :class))
-)
+(defmethod (setf vector3-x) (x (v vector3))
+  (setf (slot-value v 'x) x))
+
+(defmethod (setf vector3-y) (y (v vector3))
+  (setf (slot-value v 'y) y))
+
+(defmethod (setf vector3-z) (z (v vector3))
+  (setf (slot-value v 'z) z))
+
 
 (defmethod .+ ((va vector3) (vb vector3))
 "Add two vector3."
