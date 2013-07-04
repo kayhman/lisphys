@@ -1,10 +1,23 @@
 (in-package #:lisphys)
 
 (defclass quaternion (math)
-  ((x :accessor quat-x :initarg :x)
-   (y :accessor quat-y :initarg :y)
-   (z :accessor quat-z :initarg :z)
-   (w :accessor quat-w :initarg :w)))
+  ((x :reader quat-x :initarg :x)
+   (y :reader quat-y :initarg :y)
+   (z :reader quat-z :initarg :z)
+   (w :reader quat-w :initarg :w)))
+
+
+(defmethod (setf quat-x) (x (q quaternion))
+  (setf (slot-value q 'x) x))
+
+(defmethod (setf quat-y) (y (q quaternion))
+  (setf (slot-value q 'y) y))
+
+(defmethod (setf quat-z) (z (q quaternion))
+  (setf (slot-value q 'z) z))
+
+(defmethod (setf quat-w) (w (q quaternion))
+  (setf (slot-value q 'w) w))
 
 (setf q (make-instance 'quaternion :x 0. :y 0. :z 0. :w 1.))
 

@@ -19,6 +19,7 @@
                (:file "vector3ad-test")
                (:file "quaternion")
                (:file "quaternionad")
+               (:file "quaternionad-test")
                (:file "twist")
                (:file "displacement")
                (:file "lisphys")))

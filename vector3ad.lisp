@@ -1,36 +1,24 @@
 (in-package #:lisphys)
 
-(defclass vector3ad (math-ad vector3)
-  ())
-
-(defmethod (setf vector3-x) (x (v vector3ad))
-  (setf (slot-value v 'x) 
-	(if (numberp x)
-	    (list x 0.)
-	    x
-	    )))
-
-(defmethod (setf vector3-y) (y (v vector3ad))
-  (setf (slot-value v 'y) 
-	(if (numberp y)
-	    (list y 0.)
-	    y
-	    )))
-
-(defmethod (setf vector3-z) (z (v vector3ad))
-  (setf (slot-value v 'z) 
-	(if (numberp z)
-	    (list z 0.)
-	    z
-	    )))
+(defclass vector3ad (math-ad vector3)  ())
 
 
-
+(macrolet ((vector3ad-setf (c)
+	     `(defmethod (setf ,(symbolicate 'vector3- c)) (,c (v vector3ad))
+			  (setf (slot-value v ',c) 
+				(if  (numberp ,c)
+				    (list ,c 0.0)
+				     ,c
+				    )))))
+  (progn
+    (vector3ad-setf x)
+    (vector3ad-setf y)
+    (vector3ad-setf z)))
 
 (defmethod initialize-instance :after ( (v vector3ad) &key x y z )
   (macrolet ((set-coord (c) 
 	       `(if ,c (setf (,(symbolicate 'vector3- c) v) ,c)
-			(setf (,(symbolicate 'vector3- c) v) '(0. 0.)))))
+			(setf (,(symbolicate 'vector3- c) v) '(0.0 0.0)))))
     (progn 
       (set-coord x)
       (set-coord y)

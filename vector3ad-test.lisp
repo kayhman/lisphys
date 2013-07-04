@@ -13,6 +13,28 @@
   (let ((e1a (make-instance 'vector3ad :x 1.0)))
     (assert-true (is-null (.- e1a e1a))))
   )
+
+(deftest test-vector3ad-setf (Vector3adSuite)
+    (let ((v1 (make-instance 'vector3ad :x 1.0 :y 2.0 :z 3.0))) 
+    (progn 
+      (assert-equal '(1.0 0.0) (vector3-x v1))
+      (assert-equal '(2.0 0.0) (vector3-y v1))
+      (assert-equal '(3.0 0.0) (vector3-z v1))
+      (setf (vector3-x v1) 11.0)
+      (setf (vector3-y v1) 12.0)
+      (setf (vector3-z v1) 13.0)
+      (assert-equal '(11.0 0.0) (vector3-x v1))
+      (assert-equal '(12.0 0.0) (vector3-y v1))
+      (assert-equal '(13.0 0.0) (vector3-z v1))
+      (setf (vector3-x v1) '(11.0 1.0))
+      (setf (vector3-y v1) '(12.0 1.0))
+      (setf (vector3-z v1) '(13.0 1.0))
+      (assert-equal '(11.0 1.0) (vector3-x v1))
+      (assert-equal '(12.0 1.0) (vector3-y v1))
+      (assert-equal '(13.0 1.0) (vector3-z v1))
+      )
+    ))
+
   
 
 ;(setf clunit:*clunit-report-format* :tap)
