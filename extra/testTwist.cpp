@@ -13,7 +13,8 @@ int main(int argc, char* argv [])
   Eigen::Twistd tw(Eigen::AngularVelocityd(axis), pos.cross(axis));
 
   tw *=  M_PI / 2.0;
- 
+
+  // See Murray Lie Sastry page 50. 
   Eigen::Displacementd H_2_0 = tw.exp()  * H_1_0 * H_2_1;
 
 
