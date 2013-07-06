@@ -4,11 +4,28 @@
   ())
 
 (defmethod initialize-instance :after ( (q quaternionad) &key x y z w)
-	   (progn 
-	     (if (numberp x) (setf (quat-x q ) `(,x 0.)))
-	     (if (numberp y) (setf (quat-y q ) `(,y 0.)))
-	     (if (numberp z) (setf (quat-z q ) `(,z 0.)))
-	     (if (numberp w) (setf (quat-w q ) `(,w 0.)))))
+	   (macrolet ((set-coord (c) 
+	       `(if ,c (setf (,(symbolicate 'quat- c) q) ,c)
+		    (setf (,(symbolicate 'quat- c) q) '(0.0 0.0)))))
+	     (progn 
+	       (set-coord x)
+	       (set-coord y)
+	       (set-coord z)
+	       (set-coord w))))
+
+
+(macrolet ((quat-setf (c)
+	     `(defmethod (setf ,(symbolicate 'quat- c)) (,c (q quaternionad))
+			  (setf (slot-value q ',c) 
+				(if  (numberp ,c)
+				    (list ,c 0.0)
+				     ,c
+				    )))))
+  (progn
+    (quat-setf x)
+    (quat-setf y)
+    (quat-setf z)
+    (quat-setf w)))
 
 (setf q1a (make-instance 'quaternionad :x '(0. 0.) :y '(1. 0.) :z '(0. 0.) :w '(0. 0.)))
 
