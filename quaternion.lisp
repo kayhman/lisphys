@@ -1,10 +1,10 @@
 (in-package #:lisphys)
 
 (defclass quaternion (math)
-  ((x :reader quat-x :initarg :x)
-   (y :reader quat-y :initarg :y)
-   (z :reader quat-z :initarg :z)
-   (w :reader quat-w :initarg :w)))
+  ((x :reader quat-x :initarg :x :initform 0.0)
+   (y :reader quat-y :initarg :y :initform 0.0)
+   (z :reader quat-z :initarg :z :initform 0.0)
+   (w :reader quat-w :initarg :w :initform 1.0)))
 
 
 (defmethod (setf quat-x) (x (q quaternion))
@@ -76,7 +76,7 @@
 
 (defmethod print-object ((q quaternion) stream)
   (with-slots (x y z w) q
-       (format t "~a : ~f ~f ~f ~f~%" (type-of q) x y z w)))
+       (format t "~a : ~f ~f ~f ~f ~%" (type-of q) x y z w)))
 
 (setf e1 (make-instance 'vector3 :x 1.0 :y 0. :z 0. ))
 (setf q1 (make-instance 'quaternion :x 0.0 :y 1. :z 0. :w 0. ))
