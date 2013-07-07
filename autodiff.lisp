@@ -93,4 +93,4 @@
 (defmacro pick-class (test-class instance name)
   `(if (subtypep (type-of ,instance) ',test-class)
       (symbolicate ,(string-upcase name) "AD")
-      (symbolicat ,(string-upcase name))))
+      (symbolicate ,(string-upcase name))))
