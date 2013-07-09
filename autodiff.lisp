@@ -56,6 +56,8 @@
   (case x
     (+ 'ad-+)
     (* 'ad-*)
+    (- 'ad--)
+    (/ 'ad-/)
     (cos 'ad-cos)
     (sin 'ad-sin)
     (sqrt 'ad-sqrt)

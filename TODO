@@ -1,0 +1,2 @@
+* add macro to translate infix to prefix.
+* combine this macro with adify-exp to generate complex expression with ad for twist (using norm, ...)
