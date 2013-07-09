@@ -1,2 +1,8 @@
-* add macro to translate infix to prefix.
-* combine this macro with adify-exp to generate complex expression with ad for twist (using norm, ...)
+* Next steps
+** add macro to translate infix to prefix.
+** combine this macro with adify-exp to generate complex expression with ad for twist (using norm, ...)
+
+* Code improvements
+** Add macro reader for vector, quaternion, twist, ..
+
+
