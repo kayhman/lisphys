@@ -74,6 +74,25 @@
 		       :z (funcall .* z sinA)
 		       :w (funcall .cos (funcall .* 0.5 a) )) ))))
 
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;              Helper                           ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(set-dispatch-macro-character #\# #\q
+			      #'(lambda (stream subchar arg)
+				  (let* ((sexp (read stream t))
+					 (ty (case (fifth sexp)
+					       ('ad 'quaternionad)
+					       (otherwise 'quaternion ))))
+				    `(make-instance ',ty
+						    :x ,(first sexp)
+						    :y ,(second sexp)
+						    :z ,(third sexp)
+						    :w ,(fourth sexp)
+						    ))))
+
+
 (defmethod print-object ((q quaternion) stream)
   (with-slots (x y z w) q
        (format t "~a : ~f ~f ~f ~f ~%" (type-of q) x y z w)))

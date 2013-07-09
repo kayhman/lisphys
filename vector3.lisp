@@ -113,6 +113,22 @@
   (with-slots (x y z) v
     (and (= (val x ) 0) (= (val y) 0) (= (val z) 0))))
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;              Helper                           ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(set-dispatch-macro-character #\# #\v
+			      #'(lambda (stream subchar arg)
+				  (let* ((sexp (read stream t))
+					 (ty (case (fourth sexp)
+					       ('ad 'vector3ad)
+					       (otherwise 'vector3 ))))
+				    `(make-instance ',ty
+						    :x ,(first sexp)
+						    :y ,(second sexp)
+						    :z ,(third sexp)
+						    ))))
+
 (defmethod print-object ((v vector3) stream)
   (with-slots (x y z) v
        (format t "~a : ~f ~f ~f ~%" (type-of v) x y z)))
