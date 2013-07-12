@@ -4,5 +4,6 @@
 
 * Code improvements
 ** Add macro reader for vector, quaternion, twist, ..
+** Improve error management (wrong matrix size, ...)
 
 
