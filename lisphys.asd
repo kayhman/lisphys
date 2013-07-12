@@ -6,7 +6,10 @@
   :author "Guillaume <guillaume.saupin@gmail.com>"
   :license "Specify license here"
   :depends-on (#:clunit
-	       #:alexandria)
+	       #:alexandria
+	       #:cl-opengl
+	       #:cl-glu
+	       #:lispbuilder-sdl)
   :components ((:file "infpre")
 	       (:file "package")
 	       (:file "memoization")
@@ -22,5 +25,6 @@
                (:file "quaternionad-test")
                (:file "twist")
                (:file "displacement")
+	       (:file "viewer")
                (:file "lisphys")))
 
