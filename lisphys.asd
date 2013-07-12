@@ -25,6 +25,8 @@
                (:file "quaternionad-test")
                (:file "twist")
                (:file "displacement")
+	       (:file "matrix")
+	       (:file "matrix-test")
 	       (:file "viewer")
                (:file "lisphys")))
 
