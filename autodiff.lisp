@@ -92,7 +92,17 @@
     (,fn ,@(mapcar #'first bindings))))
 
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                              Helper                               ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (defmacro pick-class (test-class instance name)
   `(if (subtypep (type-of ,instance) ',test-class)
       (symbolicate ,(string-upcase name) "AD")
       (symbolicate ,(string-upcase name))))
+
+
+(defmacro !!ad (&body body)
+  "Converts infix to prefix adn adify the results"
+  (adify-exp (infix->prefix body (list '+ '- '* '/))))

@@ -11,4 +11,5 @@
   (:shadowing-import-from #:alexandria 
 			  #:symbolicate)
   (:shadowing-import-from #:infpre 
-			  #:!!))
+			  #:!!
+			  #:infix->prefix))
