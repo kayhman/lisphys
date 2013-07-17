@@ -47,7 +47,7 @@
 		     :y (funcall .* y a) 
 		     :z (funcall .* z a ))))
 
-(defmethod axpy ((a number) (x vector3) (y vector3))
+(defmethod axpy (a (x vector3) (y vector3))
   (.+ (.* x a) y))
 
 ;;(setq v (make-instance 'vector3 ))
