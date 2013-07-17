@@ -46,7 +46,7 @@
 )
 
 (defun ad-/ (x y)
-  (let ((y2 (* (first y) (first y))))
+  (let ((y2 (* (val y) (val y))))
     (list 
      (/ (val x) (val y))
      (/ (- (* (der x) (val y)) (* (val x) (der y))) y2) )))
