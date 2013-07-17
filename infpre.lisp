@@ -34,8 +34,7 @@
   (:export "INFIX->PREFIX"
 	   "PREFIX->INFIX"
 	   "MATH"
-	   "!!")
-  (:documentation ""))
+	   "!!"))
 
 (in-package :infpre)
 
