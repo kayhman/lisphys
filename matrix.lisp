@@ -73,20 +73,19 @@
 	     (setf (aref val j j ) 1.0)))
     I))
 
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                           Helper                           ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun matrix-map-transformer (stream subchar arg)  
-  (let* ((sexp (read stream t))
-	 (dim (car sexp))
-	 (val (cdr sexp)))
+  (let* ((val (read stream t))
+	 (nrows (length val))
+	 (ncols (length (first val))))
     `(make-instance 'matrix 
-		    :nrows (first ',dim)
-		    :ncols (second ',dim)
+		    :nrows ,nrows
+		    :ncols ,ncols
 		    :val (make-array 
-			  (list ,(first dim) , (second dim))  
-			  :initial-contents (quote ,@val)
+			   (quote (,nrows ,ncols))  
+			  :initial-contents '(,@val)
 			  )
 		    )))
 
