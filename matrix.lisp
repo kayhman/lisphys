@@ -28,6 +28,9 @@
     (if (and (< i nrows) (< j ncols))
 	(aref val i j ))))
 
+(defmethod (setf mref) (x  (m matrix) (i integer) (j integer))
+  (setf (aref (matrix-val m) i j) x))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                   Arithmetic operation                     ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
