@@ -15,13 +15,13 @@
 	      (make-array (array-total-size (matrix-val m))
 			  :displaced-to (matrix-val m) 
 			  :element-type (array-element-type (matrix-val m))))
-	     )
-      (progn
-	(setf (matrix-row-major m) 
+	)
+      (progn 
 	(setf (matrix-val m) val)
-	      (make-array (array-total-size val)
-			  :displaced-to val 
-			  :element-type (array-element-type val))))))
+	(setf (matrix-row-major m) 
+	       (make-array (array-total-size val)
+			   :displaced-to val 
+			   :element-type (array-element-type val))))))
 
 (defmethod mref ((m matrix) (i integer) (j integer))
   (with-slots (nrows ncols val) m
@@ -86,7 +86,10 @@
     `(make-instance 'matrix 
 		    :nrows (first ',dim)
 		    :ncols (second ',dim)
-		    :val (vector ,@val)
+		    :val (make-array 
+			  (list ,(first dim) , (second dim))  
+			  :initial-contents (quote ,@val)
+			  )
 		    )))
 
 (set-dispatch-macro-character #\# #\m
