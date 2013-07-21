@@ -73,8 +73,6 @@
 	     (setf (aref val j j ) 1.0)))
     I))
 
-(setq m1 (make-instance 'matrix :nrows 2 :ncols 3))
-(setq m2 (make-instance 'matrix :nrows 2 :ncols 3))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                           Helper                           ;;
