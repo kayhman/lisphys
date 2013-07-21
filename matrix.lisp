@@ -54,6 +54,19 @@
 					    :displaced-to val 
 					    :element-type (array-element-type val1 ))))))))
 
+
+(defmethod .* ((m1 matrix) (m2 matrix))
+  (with-slots ((nr1 nrows) (nc1 ncols) (val1 row-major)) m1
+    (with-slots ((nr2 nrows) (nc2 ncols) (val2 row-major)) m2
+      (if (= nc1 nr2)
+	  (let ((res (make-instance 'matrix :nrows nr1 :ncols nc2)))
+	    (loop for i from 0 to (- (matrix-nrows res) 1) do
+		 (loop for j from 0 to (- (matrix-ncols res) 1) do
+		      (setf (mref res i j ) 
+			    (reduce #'+ (map 'vector #'* (row m1 i) (col m2 j))))))
+	    res)))))
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                             Accessors                      ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -63,6 +76,16 @@
 		:displaced-to val
 		:displaced-index-offset (* i ncols)
 		:element-type (array-element-type val))))
+
+(defmethod col ((m matrix)  (j integer))
+  (with-slots (nrows ncols val) m
+    (let ((res (make-array nrows 
+			   :element-type (array-element-type val))))
+      (progn
+	(loop for i from 0 to (- nrows 1) do
+	     (setf (aref res i ) (mref m i j )))
+	res
+	))))
 
 ;See http://rosettacode.org/wiki/LU_decomposition for initial lu code.
 
