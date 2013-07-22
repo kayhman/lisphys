@@ -10,8 +10,9 @@
   (with-slots ((pos1 pos) (rot1 rot)) h1
     (with-slots ((pos2 pos) (rot2 rot)) h2
       (make-instance 'displacement
-		     :pos (.+ (.* rot1 pos2) pos1))
-		     :rot (.* rot1 rot2))))
+		     :pos (.+ (.* rot1 pos2) pos1)
+		     :rot (.* rot1 rot2)))))
+
 
 (defmethod print-object ((h displacement) stream)
   (with-slots (pos rot) h
