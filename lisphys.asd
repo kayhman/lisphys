@@ -24,6 +24,7 @@
                (:file "quaternionad")
                (:file "quaternionad-test")
                (:file "twist")
+               (:file "twist-test")
                (:file "displacement")
 	       (:file "matrix")
 	       (:file "matrix-test")
