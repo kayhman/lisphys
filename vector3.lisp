@@ -72,7 +72,7 @@
 
 (defmethod cross ((va vector3) (vb vector3))
 "Compute the cross product of two vector3"
-  (with-slots ((u1 x) (u2 y) (u3 z) (.- add) (.* mult)) va
+  (with-slots ((u1 x) (u2 y) (u3 z) (.- sub) (.* mult)) va
     (with-slots ((v1 x) (v2 y) (v3 z)) vb
       (make-instance (type-of va)
 		     :x (funcall .- (funcall .* u2 v3) (funcall .* u3 v2)) 
