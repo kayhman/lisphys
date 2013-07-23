@@ -25,7 +25,7 @@
 (defmethod .exp ((tw twist) (eps number))
   (with-slots ((ang angular) (lin linear)) tw
     (with-slots ((!* mult) (!/ div) (!+ add) (!- sub) (!sin sin) (!cos cos)) ang
-      (let* ((angNorm (if (is-null ang ) '(0. 0) (norm ang)))
+      (let* ((angNorm (if (is-null ang ) 0. (norm ang)))
 	     (angNorm2 (funcall !* angNorm angNorm))
 	     (q (make-instance (pick-class math-ad ang "quaternion"))))
 	(cond 
@@ -46,9 +46,9 @@
 		 (values trans q))
 	       )))
 	  (t
-	   (let* ((angNorm-1  (!! ( 1.0 / angNorm)))
-		 (angNorm2-1  (!! (1.0 / angNorm2)))
-		 (sinVal (funcall !sin (funcall !* (funcall !sin (funcall !/ angNorm 2.0)) angNorm-1)))
+	   (let* ((angNorm-1  (!!ad ( 1.0 / angNorm)))
+		 (angNorm2-1  (!!ad (1.0 / angNorm2)))
+		 (sinVal (funcall !* (funcall !sin (funcall !/ angNorm 2.0)) angNorm-1))
 		 (cosVal (funcall !cos (funcall !/ angNorm 2.0)))
 		 )
 	     (progn
@@ -57,8 +57,10 @@
 	       (setf (quat-z q) (funcall !* sinVal (vector3-z ang)))
 	       (setf (quat-w q) cosVal)
 	       (let* ((trans (cross ang lin))
-		     (s1 (funcall !* (funcall !sin angNorm) angNorm-1))
+		      (s0 (funcall !* (funcall !- 1.0 (funcall !cos angNorm))  angNorm2-1))
+		      (s1 (funcall !* (funcall !sin angNorm) angNorm-1))
 		     (s2 (funcall !* (funcall !- 1.0 s1) (funcall !* (dot ang lin) angNorm2-1))))
+		 (setf trans (.* trans s0))
 		 (setf trans (axpy s1 lin trans))
 		 (setf trans (axpy s2 ang trans ))
 		 (make-instance 'displacement
