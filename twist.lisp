@@ -18,7 +18,7 @@
 
 
 (defmethod .exp ((tw twist) (eps number))
-  (with-ad### (ang tw) 
+  (with-ad (ang tw) 
     (with-slots ((ang angular) (lin linear)) tw
       (let* ((angNorm (if (is-null ang )  0.0 (norm ang)))
 	     (angNorm2 (funcall !* angNorm angNorm))
