@@ -55,7 +55,7 @@
 	(tw (make-instance 'twist 
 		 :ang axis
 		 :lin (cross pos axis)))
-	 (a (* 1.0 (/ pi 2.0)))
+	 (a (* 2.0 (/ pi 2.0)))
   ) 
     (progn 
       (print (list "H_1_0 " H_1_0))
