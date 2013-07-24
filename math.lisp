@@ -29,38 +29,14 @@
 (defmethod is-ad ((obj math-ad))
   t)
 
-(defmacro with-ad (obj &body body)
-  `(macrolet ((!!! (&body expr) (if (is-ad ,obj)
-			      `(!!ad ,@expr)
-			      `(!! ,@expr)
-			      )))
-	      (with-slots ((!+ add) (!- sub) (!* mult) (!/ div) (!sqrt sqrt) (!sin sin) (!cos cos)) ,obj
-		,@body)))
-
-
 (defmacro with-ad# (obj &body body)
   `(with-slots ((!+ add) (!- sub) (!* mult) (!/ div) (!sqrt sqrt) (!sin sin) (!cos cos)) ,obj
 		,@body))
 
-(defmacro with-ad## (obj &body body)
-  `(macrolet ((!!! (&body expr) `(!!ad ,@expr)))
-    (with-ad# ,obj ,@body)
-    ))
-
-
-(defmacro with-ad### (obj &body body)
+(defmacro with-ad (obj &body body)
   `(if (is-ad ,obj)
        (macrolet ((!!! (&body expr) `(!!ad ,@expr)))
 	 (with-ad# ,obj ,@body))
        (macrolet ((!!! (&body expr) `(!! ,@expr)))
 	 (with-ad# ,obj ,@body))
        ))
-
-(defmethod test-with-ad (obj)
-  (with-ad# obj (funcall !cos '(0.0 0.0))))
-
-(defmethod test-with-ad# (obj)
-  (with-ad## obj (funcall !cos (!!! 3 * 1))))
-
-(defmethod test-with-ad## (obj)
-  (with-ad### obj (funcall !cos (!!! 3 * 1))))
