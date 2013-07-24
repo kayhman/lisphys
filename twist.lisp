@@ -4,11 +4,6 @@
   ((linear :accessor lin :initarg :lin)
    (angular :accessor ang :initarg :ang)))
 
-(setq tw (make-instance 'twist :lin (make-instance 'vector3 :x 1.0 :y 2.0 :z 3.0) :ang (make-instance 'vector3 :x 1e-3)))
-
-(setq twad (make-instance 'twist :lin (make-instance 'vector3ad :x 1.0 :y 2.0 :z 3.0) :ang (make-instance 'vector3ad :x 3.0)))
-
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                             Arithmetic                       ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -23,31 +18,30 @@
 
 
 (defmethod .exp ((tw twist) (eps number))
-  (with-slots ((ang angular) (lin linear)) tw
-    (with-slots ((!* mult) (!/ div) (!+ add) (!- sub) (!sin sin) (!cos cos)) ang
-      (let* ((angNorm (if (is-null ang ) 0. (norm ang)))
+  (with-ad### (ang tw) 
+    (with-slots ((ang angular) (lin linear)) tw
+      (let* ((angNorm (if (is-null ang )  0.0 (norm ang)))
 	     (angNorm2 (funcall !* angNorm angNorm))
 	     (q (make-instance (pick-class math-ad ang "quaternion"))))
 	(cond 
 	  ((< (val angNorm2) eps)
-	   (let ((scale  (!! (1.0 + (-1.0 + 0.0125 * angNorm2) * angNorm2 / 24.0)
-			     / 2.0)))
+	   (let ((scale  (!!! ((1.0 + (-1.0 + 0.0125 * angNorm2) * angNorm2 / 24.0) / 2.0))))
 	     (progn
 	       (setf (quat-x q) (funcall !* scale (vector3-x ang)))
 	       (setf (quat-y q) (funcall !* scale (vector3-y ang)))
 	       (setf (quat-z q) (funcall !* scale (vector3-z ang)))
-	       (setf (quat-w q) (!! (1.0 + (-1.0 + angNorm2 / 48.0) * angNorm2 / 8.0)))
+	       (setf (quat-w q) (!!! (1.0 + (-1.0 + angNorm2 / 48.0) * angNorm2 / 8.0)))
 	       (let ((trans (cross ang lin))
-		     (s1 (!! (1.0 + (-1.0 + angNorm2 / 20.0) * angNorm2 / 6.0)))
-		     (s2 (!! (((1.0 + (-1.0 + angNorm2 / 42.0) * angNorm2 * 0.05) / 6.0) * (val (dot ang lin))))))
-		 (setf trans (.* trans (!!ad (0.5 + (-1.0 + angNorm2 / 30.0) * angNorm2 / 24.0))))
+		     (s1 (!!! (1.0 + (-1.0 + angNorm2 / 20.0) * angNorm2 / 6.0)))
+		     (s2 (!!! (((1.0 + (-1.0 + angNorm2 / 42.0) * angNorm2 * 0.05) / 6.0) * (val (dot ang lin))))))
+		 (setf trans (.* trans (!!! (0.5 + (-1.0 + angNorm2 / 30.0) * angNorm2 / 24.0))))
 		 (setf trans (axpy s1 lin trans))
 		 (setf trans (axpy s2 ang trans ))
 		 (values trans q))
 	       )))
 	  (t
-	   (let* ((angNorm-1  (!!ad ( 1.0 / angNorm)))
-		 (angNorm2-1  (!!ad (1.0 / angNorm2)))
+	   (let* ((angNorm-1  (!!! ( 1.0 / angNorm)))
+		 (angNorm2-1  (!!! (1.0 / angNorm2)))
 		 (sinVal (funcall !* (funcall !sin (funcall !/ angNorm 2.0)) angNorm-1))
 		 (cosVal (funcall !cos (funcall !/ angNorm 2.0)))
 		 )
@@ -65,10 +59,9 @@
 		 (setf trans (axpy s2 ang trans ))
 		 (make-instance 'displacement
 				:pos trans
-				:rot q))
-	       ))
+				:rot q))))))))))
 
-	   ))))))
+
 
 
 (defmethod print-object ((tw twist) stream)
@@ -82,5 +75,5 @@
 	1e-3))
 
 
-(der (vector3-x (d-var q2 pos-exp ((q1 0.7) (q2 0.3) ))))
-(der (vector3-x (d-var q1 pos-exp ((q1 0.7) (q2 0.3) ))))
+(der (vector3-x (pos (d-var q2 pos-exp ((q1 0.7) (q2 0.3) )))))
+(der (vector3-x (pos (d-var q1 pos-exp ((q1 0.7) (q2 0.3) )))))
