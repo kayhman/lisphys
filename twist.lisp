@@ -18,6 +18,7 @@
 
 
 (defmethod .exp ((tw twist) (eps number))
+"Map an element of se(3) to SE(3) using the exponential map"
   (with-ad (ang tw) 
     (with-slots ((ang angular) (lin linear)) tw
       (let* ((angNorm (if (is-null ang )  0.0 (norm ang)))
