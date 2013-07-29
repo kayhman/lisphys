@@ -17,28 +17,30 @@
 
 
 
-(defmethod .exp ((tw twist) (eps number))
+(defmethod .exp ((tw twist) &optional (eps 1e-6))
 "Map an element of se(3) to SE(3) using the exponential map"
   (with-ad (ang tw) 
-    (with-slots ((ang angular) (lin linear)) tw
-      (let* ((angNorm (if (is-null ang )  0.0 (norm ang)))
+    (with-slots ((angl angular) (line linear)) tw
+      (let* ((angNorm (if (is-null angl ) '(0.0 0.0) (norm angl)))
 	     (angNorm2 (funcall !* angNorm angNorm))
-	     (q (make-instance (pick-class math-ad ang "quaternion"))))
+	     (q (make-instance (pick-class math-ad angl "quaternion"))))
 	(cond 
 	  ((< (val angNorm2) eps)
 	   (let ((scale  (!!! ((1.0 + (-1.0 + 0.0125 * angNorm2) * angNorm2 / 24.0) / 2.0))))
 	     (progn
-	       (setf (quat-x q) (funcall !* scale (vector3-x ang)))
-	       (setf (quat-y q) (funcall !* scale (vector3-y ang)))
-	       (setf (quat-z q) (funcall !* scale (vector3-z ang)))
+	       (setf (quat-x q) (funcall !* scale (vector3-x angl)))
+	       (setf (quat-y q) (funcall !* scale (vector3-y angl)))
+	       (setf (quat-z q) (funcall !* scale (vector3-z angl)))
 	       (setf (quat-w q) (!!! (1.0 + (-1.0 + angNorm2 / 48.0) * angNorm2 / 8.0)))
-	       (let ((trans (cross ang lin))
-		     (s1 (!!! (1.0 + (-1.0 + angNorm2 / 20.0) * angNorm2 / 6.0)))
-		     (s2 (!!! (((1.0 + (-1.0 + angNorm2 / 42.0) * angNorm2 * 0.05) / 6.0) * (val (dot ang lin))))))
+	       (let ((trans (cross angl line))
+		     (s1 (!!! (1.0 + (-1.0 + (angNorm2 / 20.0)) * angNorm2 / 6.0)))
+		     (s2 (!!! (((1.0 + (-1.0 + (angNorm2 / 42.0)) * (angNorm2 * 0.05)) / 6.0) * (val (dot angl line))))))
 		 (setf trans (.* trans (!!! (0.5 + (-1.0 + angNorm2 / 30.0) * angNorm2 / 24.0))))
-		 (setf trans (axpy s1 lin trans))
-		 (setf trans (axpy s2 ang trans ))
-		 (values trans q))
+		 (setf trans (axpy s1 line trans))
+		 (setf trans (axpy s2 angl trans ))
+		 (make-instance 'displacement
+				:pos trans
+				:rot q))
 	       )))
 	  (t
 	   (let* ((angNorm-1  (!!! ( 1.0 / angNorm)))
@@ -47,21 +49,19 @@
 		 (cosVal (funcall !cos (funcall !/ angNorm 2.0)))
 		 )
 	     (progn
-	       (setf (quat-x q) (funcall !* sinVal (vector3-x ang)))
-	       (setf (quat-y q) (funcall !* sinVal (vector3-y ang)))
-	       (setf (quat-z q) (funcall !* sinVal (vector3-z ang)))
+	       (setf (quat-x q) (funcall !* sinVal (vector3-x angl)))
+	       (setf (quat-y q) (funcall !* sinVal (vector3-y angl)))
+	       (setf (quat-z q) (funcall !* sinVal (vector3-z angl)))
 	       (setf (quat-w q) cosVal)
-	       (let* ((trans (cross ang lin))
+	       (let* ((transl (cross angl line))
 		      (s0 (funcall !* (funcall !- 1.0 (funcall !cos angNorm))  angNorm2-1))
 		      (s1 (funcall !* (funcall !sin angNorm) angNorm-1))
-		     (s2 (funcall !* (funcall !- 1.0 s1) (funcall !* (dot ang lin) angNorm2-1))))
-		 (setf trans (.* trans s0))
-		 (setf trans (axpy s1 lin trans))
-		 (setf trans (axpy s2 ang trans ))
-		 (make-instance 'displacement
-				:pos trans
-				:rot q))))))))))
-
+		     (s2 (funcall !* (funcall !- 1.0 s1) (funcall !* (dot angl line) angNorm2-1))))
+		 (setf transl (.* transl s0))
+		 (setf transl (axpy s1 line transl))
+		 (setf transl (axpy s2 angl transl ))
+		 (make-instance 'displacement :pos transl :rot q)
+		 )))))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;              Helper                           ;;
