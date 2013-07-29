@@ -29,5 +29,6 @@
 	       (:file "src/lib/matrix")
 	       (:file "src/tests/matrix-test")
 	       (:file "src/lib/viewer")
+	       (:file "src/examples/elbow-manipulator")
                (:file "src/lib/lisphys")))
 
