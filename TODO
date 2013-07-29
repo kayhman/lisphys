@@ -1,6 +1,9 @@
 * Next steps
 ** add macro to translate infix to prefix.
 ** combine this macro with adify-exp to generate complex expression with ad for twist (using norm, ...)
+** add method/function/macro? to create derivated object
+*** i.e. vector3ad (der + val) -> vector3 containing only derivative
+*** i.e. displacementad (dev + val) -> twist ?
 
 * Code improvements
 ** Add macro reader for vector, quaternion, twist, ..
