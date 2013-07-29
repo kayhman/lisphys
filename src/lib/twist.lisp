@@ -63,6 +63,24 @@
 				:rot q))))))))))
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;              Helper                           ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(set-dispatch-macro-character #\# #\t
+			      #'(lambda (stream subchar arg)
+				  (let* ((sexp (read stream t))
+					 (lin (first sexp))
+					 (ang (second sexp))
+					 (tyl (case (fourth lin)
+					       ('ad 'vector3ad)
+					       (otherwise 'vector3 )))
+					 (tya (case (fourth ang)
+					       ('ad 'vector3ad)
+					       (otherwise 'vector3 ))))
+				    `(make-instance 'twist
+						    :lin (make-instance ',tyl :x ,(first lin) :y ,(second lin) :z ,(third lin))
+						    :ang (make-instance ',tya :x ,(first ang) :y ,(second ang) :z ,(third ang))
+						    ))))
 
 
 (defmethod print-object ((tw twist) stream)
