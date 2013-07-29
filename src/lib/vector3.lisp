@@ -60,7 +60,7 @@
 (defmethod dot ((va vector3) (vb vector3))
 "Compute the dot product of two vector3"
   (with-slots (x y z (.+ add) (.* mult)) va
-    (with-slots ((tx x) (ty y) z(tz z)) vb
+    (with-slots ((tx x) (ty y) (tz z)) vb
       (funcall .+ (funcall .* x tx) (funcall .* y ty) (funcall .* z tz))
       )
     )
