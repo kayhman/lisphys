@@ -13,6 +13,25 @@
 		     :pos (.+ (.* rot1 pos2) pos1)
 		     :rot (.* rot1 rot2)))))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;              Helper                           ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(set-dispatch-macro-character #\# #\d
+			      #'(lambda (stream subchar arg)
+				  (let* ((sexp (read stream t))
+					 (pos (first sexp))
+					 (rot (second sexp))
+					 (typ (case (fourth pos)
+					       ('ad 'vector3ad)
+					       (otherwise 'vector3 )))
+					 (tyr (case (fifth rot)
+					       ('ad 'quaternionad)
+					       (otherwise 'quaternion ))))
+				    `(make-instance 'displacement
+						    :pos (make-instance ',typ :x ,(first pos) :y ,(second pos) :z ,(third pos))
+						    :rot (make-instance ',tyr :x ,(first rot) :y ,(second rot) :z ,(third rot) :w ,(fourth rot)
+									)))))
+
 
 (defmethod print-object ((h displacement) stream)
   (with-slots (pos rot) h
