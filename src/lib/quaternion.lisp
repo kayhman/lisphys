@@ -23,22 +23,31 @@
 
 (defmethod norm2 ((q quaternion))
 "Compute the squared norm of a quaternion"
-  (with-slots (x y z w (.+ add) (.* mult)) q
-    (.+ (.* x x) (.* y y) (.* z z) (.* w w) )
-      )
-  )
+  (with-ad q
+    (with-slots (x y z w) q
+      (funcall !+ (funcall !* x x) (funcall !* y y) (funcall !* z z) (funcall !* w w) )
+      )))
+
 
 (defmethod norm ((q quaternion))
   "Compute the norm of a quaternion"
-  (with-slots ((.sqrt sqrt)) q
-    (.sqrt (norm2 q) ))
-  )
+  (with-ad q
+     (funcall !sqrt (norm2 q) )))
 
 (defmethod conj ((q quaternion))
 "Compute the conjugate of a quaternion"
   (with-slots (x y z w (.- sub)) q
     (make-instance (type-of q) :x (funcall .- x) :y (funcall .- y) :z (funcall .- z) :w w)))
 
+(defmethod .* ((q quaternion) (a number))
+  "Multiply a quaternion by a scalar"
+  (with-ad q
+    (with-slots (x y z w) q
+      (make-instance (pick-class math-ad q "quaternion")
+		     :x (funcall !* x a)
+		     :y (funcall !* y a)
+		     :z (funcall !* z a)
+		     :w (funcall !* w a)))))
 
 (defmethod .* ((qa quaternion) (qb quaternion))
 "Multiply two quaternions"
@@ -74,6 +83,17 @@
 		       :z (funcall .* z sinA)
 		       :w (funcall .cos (funcall .* 0.5 a) )) ))))
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                 AD methods                    ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defmethod der ((q quaternion))
+  (with-slots (x y z w) q 
+	(make-instance (pick-class math-ad q "quaternion")
+		  :x (der x)
+		  :y (der y)
+		  :z (der z)
+		  :w (der w))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
