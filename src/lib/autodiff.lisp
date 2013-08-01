@@ -85,7 +85,7 @@
 (defmacro d-var (var fn bindings)
   `(let ,(mapcar #'(lambda (x) 
 		  (if (string= var (first x))
-		      (list (first x) `'(,(second x) 1.0))
+		      (list (first x) `(list ,(second x) 1.0))
 		      (create-phase x)))
 		  bindings
 		  )
