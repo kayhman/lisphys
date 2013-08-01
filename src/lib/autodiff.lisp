@@ -1,14 +1,14 @@
 (in-package #:lisphys)
 
-(defun val (x)
-(cond
-  ((numberp x) x)
-  (t (first x))))
+(defmethod val (x)
+  (cond
+    ((numberp x) x)
+    (t (first x))))
 
-(defun der (x)
-(cond 
-  ((numberp x) 0.)
-  (t (second x))))
+(defmethod der (x)
+  (cond 
+    ((numberp x) 0.)
+    (t (second x))))
 
 (defmacro adify-function (name deriv)
   `(defun ,(symbolicate "AD-" name) (x)
