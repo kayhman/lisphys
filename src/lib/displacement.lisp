@@ -13,6 +13,12 @@
 		     :pos (.+ (.* rot1 pos2) pos1)
 		     :rot (.* rot1 rot2)))))
 
+(defmethod inv ((d displacement))
+  (with-slots (pos rot) d
+   (make-instance 'displacement
+		  :pos (.* pos -1.0)
+		  :rot (conj rot))))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                 AD methods                    ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
