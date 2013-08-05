@@ -14,6 +14,17 @@
 		     :rot (.* rot1 rot2)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                 AD methods                    ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defmethod der ((d displacement))
+  (with-slots (pos rot) d 
+	(make-instance 'displacement
+		  :pos (der pos)
+		  :rot (der rot))))
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;              Helper                           ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (set-dispatch-macro-character #\# #\d
