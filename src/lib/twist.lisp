@@ -15,6 +15,28 @@
 		     :lin (.* linear a)
 		     :ang (.* angular a))))
 
+(defmethod .*-1 ((tw twist) (d displacement))
+"Multiply twist tw by displacement d."
+  (with-slots ((drot rot) pos) d
+    (with-slots (linear angular) tw
+      (with-ad pos
+	(let* ((quat-pure #q ((vector3-x angular)
+			     (vector3-y angular)
+			     (vector3-z angular)
+			     '(0. 0.)
+			     ad))
+	       (ang-vel (.* (.* quat-pure (conj drot)) 2.0))
+	       (ang-vel-vec #v ((quat-x ang-vel)
+				(quat-y ang-vel)
+				(quat-z ang-vel)
+				ad
+				))
+	      (lin-vel (cross ang-vel-vec pos)))
+	  (make-instance 'twist 
+			 :lin (.- linear lin-vel )
+			 :ang ang-vel-vec))))))
+  
+
 
 
 (defmethod .exp ((tw twist) &optional (eps 1e-6))
