@@ -16,7 +16,7 @@
 (defmethod inv ((d displacement))
   (with-slots (pos rot) d
    (make-instance 'displacement
-		  :pos (.* pos -1.0)
+		  :pos (.* (conj rot) (.* pos -1.0))
 		  :rot (conj rot))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
