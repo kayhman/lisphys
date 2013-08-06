@@ -1,5 +1,7 @@
 (in-package #:lisphys)
 
+;;Murray Ly Sastry p.105
+
 (setq l0 1.5)
 (setq l1 1.5)
 (setq l2 1.5)
@@ -36,19 +38,24 @@
        (.* (.exp (.* tw3 q3))
 	   (.* (.exp (.* tw4 q4))
 	       (.* (.exp (.* tw5 q5)) 
-		   (.* (.exp  (.* tw6 q6)) H_T_0))))))
-  )
+		   (.* (.exp  (.* tw6 q6)) H_T_0)))))))
 
-(setq h (g_t_0 0 0 0 0 0 0))
+(defun g_T_0 (q1 q2 q3 q4 q5 q6)
+  (.* (.exp (.* tw1 q1)) H_T_0))
+   
+(setq d_h (der (d-var q1 g_T_0 ((q1 0.0) 
+			    (q2 0.0)
+			    (q3 0.0)
+			    (q4 0.0)
+			    (q5 0.0)
+			    (q6 0.0) ))))
 
-(setq hh #d ((0 3.5 1.5) (0 0 0 1)))
-(setq h-1 #d ((0 -3 -1.5) (0 0 0 1)))
-(setq d_h #d ((-3 0 0) (0 0 0.5 0)))
+(setf (rot d_h) (.* (rot d_h) 2.0))
 
+;;Spatial velocity
+(setq ang-s (ang (.*-1 d_h (g_T_0 0 0 0 0 0 0))))
+(setq lin-s (lin (.*-1 d_h (g_T_0 0 0 0 0 0 0))))
 
-(setq d_h (d-var q1 g_T_0 ((q1 0.0) 
-		  (q2 0.0)
-		  (q3 0.0)
-		  (q4 0.0)
-		  (q5 0.0)
-		  (q6 0.0) )))
+(.*-1 d_h (g_T_0 0 0 0 0 0 0))
+
+(.* (.* (.* (rot d_h) (rot (inv (g_t_0 0 0 0 0 0 0)))) 2.0) (pos H_T_0))
