@@ -24,9 +24,13 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defmethod der ((d displacement))
   (with-slots (pos rot) d 
-	(make-instance 'displacement
-		  :pos (der pos)
-		  :rot (der rot))))
+	(let ((d-rot (der rot)))
+	 (make-instance 'twist
+			:lin (der pos)
+			:ang #v ((quat-x d-rot)
+				 (quat-y d-rot)
+				 (quat-z d-rot))))))
+
 
 
 
