@@ -12,9 +12,15 @@
 
 
 (setq q1_0 (* (/ (random 180) 180) pi ))
-(setq q1_0 0.0)
+(setq q1_0 (/ pi 2.0))
+
 
 (setq dtrans (der (d-var q1 trans ((q1 q1_0)))))
 
+;;Spatial velocity
+(setq ang-s (.* (rot (.* dtrans (inv (trans q1_0)))) 2.0))
+(setq lin-s (pos (.* dtrans (inv (trans q1_0)))))
+
+;;Body velocity
 (.* (rot (.* (inv (trans q1_0)) dtrans)) 2.0)
 (pos (.* (inv (trans q1_0)) dtrans))
