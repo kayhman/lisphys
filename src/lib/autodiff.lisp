@@ -80,7 +80,7 @@
       ,(adify-exp exp)))
 
 (defun create-phase (x)
-  (list (first x) `'(,(second x) 0.)))
+  (list (first x) `(list ,(second x) 0.)))
 
 (defmacro d-var (var fn bindings)
   `(let ,(mapcar #'(lambda (x) 
