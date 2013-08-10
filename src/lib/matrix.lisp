@@ -77,6 +77,17 @@
 		:displaced-index-offset (* i ncols)
 		:element-type (array-element-type val))))
 
+(defmethod (setf row) ((tw twist)  (m matrix) (i integer))
+  "Set the value of row i element with twist value, starting with linear"
+  (with-slots (angular linear) tw
+    (progn
+      (setf (mref m i 0) (vector3-x linear))
+      (setf (mref m i 1) (vector3-y linear))
+      (setf (mref m i 2) (vector3-z linear))
+      (setf (mref m i 3) (vector3-x angular))
+      (setf (mref m i 4) (vector3-y angular))
+      (setf (mref m i 5) (vector3-z angular)))))
+
 (defmethod col ((m matrix)  (j integer))
   (with-slots (nrows ncols val) m
     (let ((res (make-array nrows 
