@@ -1,11 +1,9 @@
 (in-package #:lisphys)
 
 (defmacro jacobian-col (f var &rest bindings)
-  `(progn 
-     (print ,var)
-     (let* ((f0 (,f ,@(mapcar #'second bindings)))
+  `(let* ((f0 (,f ,@(mapcar #'second bindings)))
 	    (df (der (d-var var ,f (,@bindings)))))
-       (.*-1 df f0))))
+       (.*-1 df f0)))
 
 (defmacro jacobian-transpose (f bindings)
   `(let ((jacobian (make-instance 'matrix :nrows (length ',bindings) :ncols 6)))
