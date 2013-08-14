@@ -10,7 +10,7 @@
   (if (not val)
       (progn
 	(setf (matrix-val m) 
-	      (make-array `(,nrows ,ncols)))
+	      (make-array `(,nrows ,ncols) :initial-element 0))
 	(setf (matrix-row-major m) 
 	      (make-array (array-total-size (matrix-val m))
 			  :displaced-to (matrix-val m) 
@@ -109,6 +109,62 @@
 	(loop for j from 0 to (- n 1) do
 	     (setf (aref val j j ) 1.0)))
     I))
+
+;; Swap two rows l and k of a mxn matrix A, which is a 2D array.
+(defun swap-rows (A l k)
+  (let* ((n (matrix-ncols A))
+         (row (make-array n :initial-element 0)))
+    (loop for j from 0 to (- n 1) do
+          (setf (aref row j) (mref A l j))
+          (setf (mref A l j) (mref A k j))
+          (setf (mref A k j) (aref row j)))))
+ 
+;; Creates the pivoting matrix for A.
+(defun pivotize (A)
+  (let* ((n (matrix-ncols A))
+         (P (eye n)))
+    (loop for j from 0 to (- n 1) do
+          (let ((max (mref A j j))
+                (row j))
+            (loop for i from j to (- n 1) do
+                  (if (> (mref A i j) max)
+                      (setq max (mref A i j)
+                            row i)))
+            (if (not (= j row))
+                (swap-rows P j row))))
+ 
+  ;; Return P.
+  P))
+ 
+;; Decomposes a square matrix A by PA=LU and returns L, U and P.
+(defun lu (A)
+  (let* ((n (matrix-ncols A))
+         (L (make-instance 'matrix :nrows n :ncols n))
+         (U (make-instance 'matrix :nrows n :ncols n))
+         (P (pivotize A))
+         (A (.* P A)))
+ 
+    (loop for j from 0 to (- n 1) do
+          (setf (mref L j j) 1)
+          (loop for i from 0 to j do
+                (setf (mref U i j)
+                      (- (mref A i j)
+                         (loop for k from 0 to (- i 1)
+                               sum (* (mref U k j)
+                                      (mref L i k))))))
+          (loop for i from j to (- n 1) do
+                (setf (mref L i j)
+                      (/ (- (mref A i j)
+                            (loop for k from 0 to (- j 1)
+                                  sum (* (mref U k j)
+                                         (mref L i k))))
+                         (mref U j j)))))
+ 
+  ;; Return L, U and P.
+  (values L U P)))
+
+(defun solve (P L U x b)
+  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                           Helper                           ;;
