@@ -17,4 +17,22 @@
     (assert-equal t (equalp  (matrix-val m7) (matrix-val (.* m5 m6))))
     ))
 
+(deftest test-lu (MatrixSuite)
+  (let ((m1 #m((1 3 5) (2 4 7) (1 1 0))))
+    (multiple-value-bind  (L U P) (lu m1)
+      (progn
+	(assert-equal t (equalp  (matrix-val #m ((1.0 0 0) 
+				      (0.5 1.0 0)
+				      (0.5 -1.0 1.0)
+				      )) (matrix-val L)))
+	(assert-equal t (equalp  (matrix-val #m ((2.0 4.0 7.0) 
+				      (0 1.0 1.5)
+				      (0 0 -2.0)
+				      )) (matrix-val U)))
+	(assert-equal t (equalp  (matrix-val #m ((0 1.0 0) 
+				   (1. 0 0)
+				   (0 -0 1.0)
+				   )) (matrix-val P)))))))
+  
+
 (run-suite 'MatrixSuite)
