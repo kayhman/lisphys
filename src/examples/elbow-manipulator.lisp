@@ -6,6 +6,9 @@
 (setq l1 1.5)
 (setq l2 1.5)
 
+(setq tw0 #t((1 0 0 ad) 
+	     (0 0 0 ad)))
+
 (setq tw1 #t((0 0 0 ad) 
 	     (0 0 1 ad)))
 
@@ -36,6 +39,9 @@
 	       (.* (.exp (.* tw5 q5)) 
 		   (.* (.exp  (.* tw6 q6)) H_T_0)))))))
 
+(defun g2_T_0 (q0 q1 q2 q3 q4 q5 q6)
+  (.* (.exp (.* tw0 q0))
+      (g_t_0 q1 q2 q3 q4 q5 q6)))
 
 
 (let* ((q1_0 pi)
