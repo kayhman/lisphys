@@ -145,7 +145,7 @@
          (A (.* P A)))
  
     (loop for j from 0 to (- n 1) do
-          (setf (mref L j j) 1)
+	 (setf (mref L j j) 1)
           (loop for i from 0 to j do
                 (setf (mref U i j)
                       (- (mref A i j)
@@ -159,9 +159,42 @@
                                   sum (* (mref U k j)
                                          (mref L i k))))
                          (mref U j j)))))
- 
-  ;; Return L, U and P.
-  (values L U P)))
+    ;; Return L, U and P.
+    (values L U P)))
+
+(defun forward-substitution (L y b)
+  (progn 
+    (fill y 0)
+    (let* ((n (matrix-ncols L)))
+      (loop for i from 0 to (- n 1) do
+	   (let ((sub-r (make-array i :displaced-to (row L i) :element-type (array-element-type y)))
+		 (sub-y (make-array i :displaced-to y :element-type (array-element-type y) )))
+	     (setf (aref y i) (- (aref b i) (reduce #'+ (map 'vector #'* sub-r sub-y) ))))))))
+
+(defun backward-substitution (U x y)
+  (progn
+    (fill x 0)
+    (let* ((n (matrix-ncols U)))
+      (loop for i from (- n 1) downto 0 do
+	   (let ((sub-r (make-array (- n (+ i 1)) :displaced-index-offset (+ i 1) 
+				    :displaced-to (row U i) :element-type (array-element-type x)))
+		 (sub-x (make-array (- n (+ i 1)) :displaced-index-offset (+ i 1)
+				    :displaced-to x :element-type (array-element-type x) )))
+	     (setf (aref x i) (/ (- (aref y i) (reduce #'+ (map 'vector #'* sub-r sub-x))) (mref U i i))))))))
+
+
+
+(multiple-value-bind (L U P) (lu m1) (setq Ll L) (setq Uu U) (setq Pp P))
+(setq y (make-array 3 :initial-element 0. ))
+(setq x (make-array 3 :initial-element 0. ))
+(setq b #(1 2 3))
+
+(forward-substitution Ll y b)
+(backward-substitution Uu x y)
+
+;;check : (.* P (.* m1 Xm)) == b
+
+(loop for i from 12 to 0 do (print i))
 
 (defun solve (P L U x b)
   )
