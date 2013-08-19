@@ -10,6 +10,3 @@
   `(let ((jacobian (make-instance 'matrix :nrows (length ',bindings) :ncols 6)))
      (progn ,@(loop for n in bindings collect `(setf (row jacobian (position ',n ',bindings)) (jacobian-col ,f ,(first n) ,@bindings))))
      jacobian))
-
-(macroexpand-1 '(jacobian-transpose g2_t_0 ((q0 0) (q1 0) (q2 0) (q3 0) (q4 0) (q5 0) (q6 0))))
-(jacobian-transpose g2_t_0 ((q0 0) (q1 0) (q2 0) (q3 0) (q4 0) (q5 0) (q6 0)))
