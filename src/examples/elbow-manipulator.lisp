@@ -44,24 +44,3 @@
       (g_t_0 q1 q2 q3 q4 q5 q6)))
 
 
-(let* ((q1_0 pi)
-       (q2_0 0)
-       (q3_0 0)
-       (q4_0 0)
-       (q5_0 0)
-       (q6_0 0)
-       (gt0 (g_t_0 q1_0  q2_0  q3_0  q4_0 q5_0  q6_0)))
-  (progn 
-    (setq d_h (der (d-var q5 g_T_0 ((q1 q1_0)
-				    (q2 q2_0)
-				    (q3 q3_0)
-				    (q4 q4_0)
-				    (q5 q5_0)
-				    (q6 q6_0)))))
-    ;;Spatial velocity
-    (setq ang-s (ang (.*-1 d_h gt0)))
-    (setq lin-s (lin (.*-1 d_h gt0)))
-    (setq tw-r (.*-1 d_h gt0))
-    ))
-
-
