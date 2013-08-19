@@ -18,7 +18,11 @@
     ))
 
 (deftest test-lu (MatrixSuite)
-  (let ((m1 #m((1 3 5) (2 4 7) (1 1 0))))
+  (let ((m1 #m((1 3 5) (2 4 7) (1 1 0)))
+	(y (make-array 3 :initial-element 0. ))
+	(x (make-array 3 :initial-element 0. ))
+	(b #(1 2 3))
+	)
     (multiple-value-bind  (L U P) (lu m1)
       (progn
 	(assert-equal t (equalp  (matrix-val #m ((1.0 0 0) 
@@ -32,7 +36,10 @@
 	(assert-equal t (equalp  (matrix-val #m ((0 1.0 0) 
 				   (1. 0 0)
 				   (0 -0 1.0)
-				   )) (matrix-val P)))))))
-  
+				   )) (matrix-val P)))
+	(forward-substitution L y b)
+	(backward-substitution U x y)
+	(assert-equal t (equalp  (matrix-val (.* m1 x))
+				 (matrix-val b)))))))
 
 (run-suite 'MatrixSuite)
