@@ -20,21 +20,6 @@
 		  :rot (conj rot))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;                 AD methods                    ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defmethod der ((d displacement))
-  (with-slots (pos rot) d 
-	(let ((d-rot (der rot)))
-	 (make-instance 'twist
-			:lin (der pos)
-			:ang #v ((quat-x d-rot)
-				 (quat-y d-rot)
-				 (quat-z d-rot))))))
-
-
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;              Helper                           ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (set-dispatch-macro-character #\# #\d
