@@ -1,8 +1,9 @@
 (in-package #:lisphys)
+;; p. MLS 115
 
 (defmacro jacobian-col (f var &rest bindings)
   `(let* ((f0 (,f ,@(mapcar #'second bindings)))
-	    (df (der (d-var ,var ,f (,@bindings)))))
+	    (df (d-var ,var ,f (,@bindings))))
        (.*-1 df f0)))
 
 (defmacro jacobian-transpose (f bindings)
