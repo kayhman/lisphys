@@ -183,22 +183,6 @@
 	     (setf (aref x i) (/ (- (aref y i) (reduce #'+ (map 'vector #'* sub-r sub-x))) (mref U i i))))))))
 
 
-
-(multiple-value-bind (L U P) (lu m1) (setq Ll L) (setq Uu U) (setq Pp P))
-(setq y (make-array 3 :initial-element 0. ))
-(setq x (make-array 3 :initial-element 0. ))
-(setq b #(1 2 3))
-
-(forward-substitution Ll y b)
-(backward-substitution Uu x y)
-
-;;check : (.* P (.* m1 Xm)) == b
-
-(loop for i from 12 to 0 do (print i))
-
-(defun solve (P L U x b)
-  )
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                           Helper                           ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -224,3 +208,19 @@
        (format t "~a : ~a ~a ~% ~% ~a" (type-of m) nrows ncols val)))
 ;test read-macro
 ;(matrix-ncols #m((1 2) 1. 2.))
+
+
+(multiple-value-bind (L U P) (lu #m((1 3 5) (2 4 7) (1 1 0))) (setq Ll L) (setq Uu U) (setq Pp P))
+(setq y (make-array 3 :initial-element 0. ))
+(setq x (make-array 3 :initial-element 0. ))
+(setq b #(1 2 3))
+
+(forward-substitution Ll y b)
+(backward-substitution Uu x y)
+
+;;check : (.* P (.* m1 Xm)) == b
+
+(loop for i from 12 to 0 do (print i))
+
+(defun solve (P L U x b)
+  nil)
