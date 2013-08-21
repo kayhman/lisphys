@@ -1,5 +1,7 @@
 (in-package #:lisphys)
 
+;;See http://en.wikipedia.org/wiki/List_of_moment_of_inertia_tensors
+
 (defun ball-inertia (m r)
   "Compute the inertia matrix of a ball of mass m and radius r"
   (let ((i (!! m * r * r * 2.0 / 5.0)))
