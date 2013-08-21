@@ -195,9 +195,10 @@
 		    :ncols ,ncols
 		    :val (make-array 
 			   (quote (,nrows ,ncols))  
-			  :initial-contents '(,@val)
-			  )
-		    )))
+			  :initial-contents (list ,@(mapcar #'(lambda (x)
+							      `(list ,@x))
+							  val))))))
+
 
 (set-dispatch-macro-character #\# #\m
 			      #'matrix-map-transformer)
