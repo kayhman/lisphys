@@ -19,6 +19,27 @@
 		  :pos (.* (conj rot) (.* pos -1.0))
 		  :rot (conj rot))))
 
+;; MLS P.54
+(defmethod .*-1 ((d-der displacement) (d displacement))
+"Multiply displacement derivative d-der by displacement d. Used to compute unit twist."
+  (with-slots ((drot rot) pos) d
+    (with-slots ((der-rot rot) (der-pos pos)) d-der
+      (with-ad pos
+	(let* ((quat-pure #q ((der (quat-x der-rot))
+			      (der (quat-y der-rot))
+			      (der (quat-z der-rot))
+			      '(0. 0.)
+			      ad))
+	       (ang-vel (.* (.* quat-pure (conj drot)) 2.0))
+	       (ang-vel-vec #v ((quat-x ang-vel)
+				(quat-y ang-vel)
+				(quat-z ang-vel)
+				ad
+				)))
+	  (make-instance 'twist 
+			 :lin (der der-pos)
+			 :ang ang-vel-vec))))))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;              Helper                           ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

@@ -15,30 +15,6 @@
 		     :lin (.* linear a)
 		     :ang (.* angular a))))
 
-;; MLS P.54
-(defmethod .*-1 ((d-der displacement) (d displacement))
-"Multiply twist tw by displacement d."
-  (with-slots ((drot rot) pos) d
-    (with-slots ((der-rot rot) (der-pos pos)) d-der
-      (with-ad pos
-	(let* ((quat-pure #q ((der (quat-x der-rot))
-			      (der (quat-y der-rot))
-			      (der (quat-z der-rot))
-			      '(0. 0.)
-			      ad))
-	       (ang-vel (.* (.* quat-pure (conj drot)) 2.0))
-	       (ang-vel-vec #v ((quat-x ang-vel)
-				(quat-y ang-vel)
-				(quat-z ang-vel)
-				ad
-				)))
-	  (make-instance 'twist 
-			 :lin (der der-pos)
-			 :ang ang-vel-vec))))))
-  
-
-
-
 (defmethod .exp ((tw twist) &optional (eps 1e-6))
 "Map an element of se(3) to SE(3) using the exponential map"
   (with-ad (ang tw) 
