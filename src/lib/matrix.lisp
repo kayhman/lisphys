@@ -110,6 +110,18 @@
 	     (setf (aref val j j ) 1.0)))
     I))
 
+(defmethod transpose ((m matrix))
+  (with-slots (nrows ncols) m
+    (let ((mt (make-instance 'matrix :nrows ncols :ncols nrows)))
+      (progn
+	(loop for i from 0 to (- nrows 1) do
+	     (loop for j from 0 to (- ncols 1) do
+		  (setf (mref mt j i) (mref m i j))))
+	mt))))
+
+
+
+
 ;; Swap two rows l and k of a mxn matrix A, which is a 2D array.
 (defun swap-rows (A l k)
   (let* ((n (matrix-ncols A))
