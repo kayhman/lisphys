@@ -39,6 +39,10 @@
   (.* (.exp (.* tw1 q1)) (.* (.* (.exp (.* tw2 q2)) (.exp (.* tw3 q3))) g_l3_s_0)))
 
 
-(jacobian-transpose g_l1_s ((q1 0) (q2 0) (q3 0)))
-(jacobian-transpose g_l2_s ((q1 0) (q2 0) (q3 0)))
-(jacobian-transpose g_l3_s ((q1 0) (q2 0) (q3 0)))
+(setq m1 (ball-inertia 1.0 0.3))
+(setq m2 (ball-inertia 1.0 0.3))
+(setq m3 (ball-inertia 1.0 0.3))
+
+(setq Jt1 (jacobian-transpose g_l1_s ((q1 0) (q2 0) (q3 0))))
+(setq Jt2 (jacobian-transpose g_l2_s ((q1 0) (q2 0) (q3 0))))
+(setq Jt3 (jacobian-transpose g_l3_s ((q1 0) (q2 0) (q3 0))))
