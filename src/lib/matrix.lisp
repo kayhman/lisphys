@@ -4,24 +4,35 @@
   ((val :accessor matrix-val :initarg :val)
    (nrows :accessor matrix-nrows :initarg :nrows :initform 0)
    (ncols :accessor matrix-ncols :initarg :ncols :initform 0)
-   (row-major :accessor matrix-row-major)))
+   (row-major :accessor matrix-row-major :initarg :row-major )))
 
-(defmethod initialize-instance :after ((m matrix) &key nrows ncols val)
-  (if (not val)
-      (progn
-	(setf (matrix-val m) 
-	      (make-array `(,nrows ,ncols) :initial-element 0))
-	(setf (matrix-row-major m) 
-	      (make-array (array-total-size (matrix-val m))
-			  :displaced-to (matrix-val m) 
-			  :element-type (array-element-type (matrix-val m))))
-	)
-      (progn 
-	(setf (matrix-val m) val)
-	(setf (matrix-row-major m) 
-	       (make-array (array-total-size val)
-			   :displaced-to val 
-			   :element-type (array-element-type val))))))
+(defmethod initialize-instance :after ((m matrix) &key nrows ncols val row-major)
+  (cond 
+    ((and (not row-major) (not val)) 
+     (progn
+       (setf (matrix-val m) 
+	     (make-array `(,nrows ,ncols) :initial-element 0))
+       (setf (matrix-row-major m) 
+	     (make-array (array-total-size (matrix-val m))
+			 :displaced-to (matrix-val m) 
+			 :element-type (array-element-type (matrix-val m))))
+       ))
+    (val 
+     (progn 
+       (setf (matrix-val m) val)
+       (setf (matrix-row-major m) 
+	     (make-array (array-total-size val)
+			 :displaced-to val 
+			 :element-type (array-element-type val)))))
+    (row-major 
+     (progn 
+       (setf (matrix-val m) 
+	     (make-array `(,nrows ,ncols)
+			 :displaced-to row-major 
+			 :element-type (array-element-type row-major)))
+       (setf (matrix-row-major m) row-major)))))
+
+
 
 (defmethod mref ((m matrix) (i integer) (j integer))
   (with-slots (nrows ncols val) m
@@ -194,6 +205,17 @@
 				    :displaced-to x :element-type (array-element-type x) )))
 	     (setf (aref x i) (/ (- (aref y i) (reduce #'+ (map 'vector #'* sub-r sub-x))) (mref U i i))))))))
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                           Autodiff                         ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(macrolet ((def-get (op)
+	     `(defmethod ,op ((m matrix)) (with-slots (nrows ncols) m
+		 (make-instance 'matrix :nrows nrows :ncols ncols 
+				:row-major (map (type-of (matrix-row-major m)) #'(lambda (x) (,op x)) (matrix-row-major m)))))))
+  (progn
+    (def-get val)
+    (def-get der)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                           Helper                           ;;
