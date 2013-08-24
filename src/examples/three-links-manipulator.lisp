@@ -46,3 +46,9 @@
 (setq Jt1 (jacobian-transpose g_l1_s ((q1 0) (q2 0) (q3 0))))
 (setq Jt2 (jacobian-transpose g_l2_s ((q1 0) (q2 0) (q3 0))))
 (setq Jt3 (jacobian-transpose g_l3_s ((q1 0) (q2 0) (q3 0))))
+
+(setq mg1 (.* (val Jt1) (.* m1 (val (transpose Jt1)))))
+(setq mg2 (.* (val Jt2) (.* m1 (val (transpose Jt2)))))
+(setq mg3 (.* (val Jt3) (.* m1 (val (transpose Jt3)))))
+
+(setq mg (.+ (.+ mg1 mg2) mg3))
