@@ -17,36 +17,33 @@
 
 (defmethod .+ ((va vector3) (vb vector3))
 "Add two vector3."
-  (with-slots (x y z (.+ add)) va
+  (with-slots (x y z) va
     (with-slots ((tx x) (ty y) (tz z)) vb
-      (make-instance (type-of va)
-		     :x (funcall .+ x tx) 
-		     :y (funcall .+ y ty) 
-		     :z (funcall .+ z tz) )
-      )
-    )
-  )
+      (with-ad va
+	(make-instance (type-of va)
+		       :x (!+ x tx) 
+		       :y (!+ y ty) 
+		       :z (!+ z tz) )))))
 
 (defmethod .- ((va vector3) (vb vector3))
 "Substract vector3 vb from va."
-  (with-slots (x y z (.- sub) ) va
+  (with-slots (x y z) va
     (with-slots ((tx x) (ty y) (tz z)) vb
-      (make-instance (type-of va) 
-		     :x (funcall .- x tx)
-		     :y (funcall .- y ty) 
-		     :z (funcall .- z tz) )
-      )
-    )
-  )
+      (with-ad va
+	(make-instance (type-of va) 
+		       :x (!- x tx)
+		       :y (!- y ty) 
+		       :z (!- z tz) )))))
+
 
 (defmethod .* ((va vector3) a)
 "Multiply vector3 va by scalar a."
   (with-ad va
     (with-slots (x y z) va
       (make-instance (type-of va) 
-		     :x (funcall !* x a)
-		     :y (funcall !* y a) 
-		     :z (funcall !* z a )))))
+		     :x (!* x a)
+		     :y (!* y a) 
+		     :z (!* z a )))))
 
 (defmethod axpy (a (x vector3) (y vector3))
   (.+ (.* x a) y))
@@ -60,28 +57,21 @@
 
 (defmethod dot ((va vector3) (vb vector3))
 "Compute the dot product of two vector3"
-  (with-slots (x y z (.+ add) (.* mult)) va
+  (with-slots (x y z) va
     (with-slots ((tx x) (ty y) (tz z)) vb
-      (funcall .+ (funcall .* x tx) (funcall .* y ty) (funcall .* z tz))
-      )
-    )
-  )
-
-;;(dot v v)
-;;(dot vp vp)
-
+      (with-ad va
+	(!+ (!* x tx) (!* y ty) (!* z tz))))))
 
 (defmethod cross ((va vector3) (vb vector3))
 "Compute the cross product of two vector3"
-  (with-slots ((u1 x) (u2 y) (u3 z) (.- sub) (.* mult)) va
+  (with-slots ((u1 x) (u2 y) (u3 z)) va
     (with-slots ((v1 x) (v2 y) (v3 z)) vb
-      (make-instance (type-of va)
-		     :x (funcall .- (funcall .* u2 v3) (funcall .* u3 v2)) 
-		     :y (funcall .- (funcall .* u3 v1) (funcall .* u1 v3)) 
-		     :z (funcall .- (funcall .* u1 v2) (funcall .* u2 v1)) )
-      )
-    )
-  )
+      (with-ad va
+	(make-instance (type-of va)
+		       :x (!- (!* u2 v3) (!* u3 v2)) 
+		       :y (!- (!* u3 v1) (!* u1 v3)) 
+		       :z (!- (!* u1 v2) (!* u2 v1)) )))))
+
 
 (defmethod norm2 ((v vector3))
 "Compute the squared norm of a vector3"
@@ -92,22 +82,20 @@
 
 (defmethod norm ((v vector3))
 "Compute the norm of a vector3"
-(with-slots ((.sqrt sqrt)) v
-    (funcall .sqrt (norm2 v) )
+(with-ad v
+    (!sqrt (norm2 v) )
   )
 )
 
 (defmethod normalize ((v vector3))
   "Compute the norm of a vector3"
-  (with-slots (x y z (./ div)) v
+  (with-slots (x y z ) v
     (let ((nrm (norm v)))
-      (make-instance (type-of v)
-		     :x (funcall ./ x nrm)
-		     :y (funcall ./ y nrm)
-		     :z (funcall ./ z nrm) )
-      )
-    )
-  )
+      (with-ad v
+	(make-instance (type-of v)
+		      :x (!/ x nrm)
+		      :y (!/ y nrm)
+		      :z (!/ z nrm) )))))
 
 (defmethod is-null ((v vector3))
   "Return t if vectir i null. Avoid to compute the norm and its undefined derivative in 0."

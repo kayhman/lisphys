@@ -25,39 +25,41 @@
 "Compute the squared norm of a quaternion"
   (with-ad q
     (with-slots (x y z w) q
-      (funcall !+ (funcall !* x x) (funcall !* y y) (funcall !* z z) (funcall !* w w) )
+      (!+ (!* x x) (!* y y) (!* z z) (!* w w) )
       )))
 
 
 (defmethod norm ((q quaternion))
   "Compute the norm of a quaternion"
   (with-ad q
-     (funcall !sqrt (norm2 q) )))
+     (!sqrt (norm2 q) )))
 
 (defmethod conj ((q quaternion))
 "Compute the conjugate of a quaternion"
   (with-slots (x y z w (.- sub)) q
-    (make-instance (type-of q) :x (funcall .- x) :y (funcall .- y) :z (funcall .- z) :w w)))
+    (with-ad q
+	(make-instance (type-of q) :x (!- x) :y (!- y) :z (!- z) :w w))))
 
 (defmethod .* ((q quaternion) (a number))
   "Multiply a quaternion by a scalar"
   (with-ad q
     (with-slots (x y z w) q
       (make-instance (pick-class math-ad q "quaternion")
-		     :x (funcall !* x a)
-		     :y (funcall !* y a)
-		     :z (funcall !* z a)
-		     :w (funcall !* w a)))))
+		     :x (!* x a)
+		     :y (!* y a)
+		     :z (!* z a)
+		     :w (!* w a)))))
 
 (defmethod .* ((qa quaternion) (qb quaternion))
 "Multiply two quaternions"
-  (with-slots ((qax x) (qay y) (qaz z) (qaw w) (.+ add) (.* mult) (.- sub)) qa
+  (with-slots ((qax x) (qay y) (qaz z) (qaw w) ) qa
     (with-slots ((qbx x) (qby y) (qbz z) (qbw w)) qb
-      (make-instance (type-of qa) 
-		     :x (funcall .+ (funcall .* qaw qbx) (funcall .* qax qbw) (funcall .* qay qbz) (funcall .- (funcall .* qaz qby)) ) 
-		     :y (funcall .+ (funcall .* qaw qby) (funcall .* qay qbw) (funcall .* qaz qbx) (funcall .- (funcall .* qax qbz)) ) 
-		     :z (funcall .+ (funcall .* qaw qbz) (funcall .* qaz qbw) (funcall .* qax qby) (funcall .- (funcall .* qay qbx)) )
-		     :w (funcall .- (funcall .* qaw qbw) (funcall .* qax qbx) (funcall .* qay qby) (funcall .* qaz qbz)) ))))
+      (with-ad qa
+	(make-instance (type-of qa) 
+		       :x (!+ (!* qaw qbx) (!* qax qbw) (!* qay qbz) (!- (!* qaz qby)) ) 
+		       :y (!+ (!* qaw qby) (!* qay qbw) (!* qaz qbx) (!- (!* qax qbz)) ) 
+		       :z (!+ (!* qaw qbz) (!* qaz qbw) (!* qax qby) (!- (!* qay qbx)) )
+		       :w (!- (!* qaw qbw) (!* qax qbx) (!* qay qby) (!* qaz qbz)) )))))
 
 
 (defmethod .* ((q quaternion) (v vector3))
@@ -73,15 +75,15 @@
 		     :z (quat-z rqv) )))))
 
 (defmethod from-axis ((v vector3) a )
-  (with-slots ((.* mult) (.cos cos) (.sin sin)) v
-    (let ((sinA (funcall .sin (funcall .* 0.5 a)))
+  (with-ad a
+    (let ((sinA (!sin (!* 0.5 a)))
 	  (vn (normalize v)) )
       (with-slots (x y z) vn
 	(make-instance (pick-class math-ad v "quaternion")
-		       :x (funcall .* x sinA)
-		       :y (funcall .* y sinA)
-		       :z (funcall .* z sinA)
-		       :w (funcall .cos (funcall .* 0.5 a) )) ))))
+		       :x (!* x sinA)
+		       :y (!* y sinA)
+		       :z (!* z sinA)
+		       :w (!cos (!* 0.5 a) )) ))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

@@ -30,8 +30,15 @@
   t)
 
 (defmacro with-ad# (obj &body body)
-  `(with-slots ((!+ add) (!- sub) (!* mult) (!/ div) (!sqrt sqrt) (!sin sin) (!cos cos) (!sqrt sqrt)) ,obj
-		,@body))
+  `(with-slots ((!+# add) (!-# sub) (!*# mult) (!/# div) (!sqrt# sqrt) (!sin# sin) (!cos# cos)) ,obj
+     (labels ((!+ (&rest x) (apply !+# x))
+	      (!- (x &rest y) (apply !-# x y))
+	      (!* (x y) (funcall !*# x y))
+	      (!/ (x y) (funcall !/# x y))
+	      (!sqrt (x) (funcall !sqrt# x))
+	      (!sin (x) (funcall !sin# x))
+	      (!cos (x) (funcall !cos# x)))
+       ,@body)))
 
 (defmacro with-ad (obj &body body)
   `(if (is-ad ,obj)
