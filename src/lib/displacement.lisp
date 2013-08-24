@@ -24,7 +24,6 @@
 "Multiply displacement derivative d-der by displacement d. Used to compute unit twist."
   (with-slots ((drot rot) pos) d
     (with-slots ((der-rot rot) (der-pos pos)) d-der
-      (with-ad pos
 	(let* ((quat-pure #q ((der (quat-x der-rot))
 			      (der (quat-y der-rot))
 			      (der (quat-z der-rot))
@@ -38,7 +37,7 @@
 				)))
 	  (make-instance 'twist 
 			 :lin (der der-pos)
-			 :ang ang-vel-vec))))))
+			 :ang ang-vel-vec)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;              Helper                           ;;
