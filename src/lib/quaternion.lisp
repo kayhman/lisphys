@@ -75,15 +75,15 @@
 		     :z (quat-z rqv) )))))
 
 (defmethod from-axis ((v vector3) a )
-  (with-ad a
+  (with-ad v
     (let ((sinA (!sin (!* 0.5 a)))
 	  (vn (normalize v)) )
       (with-slots (x y z) vn
-	(make-instance (pick-class math-ad v "quaternion")
-		       :x (!* x sinA)
-		       :y (!* y sinA)
-		       :z (!* z sinA)
-		       :w (!cos (!* 0.5 a) )) ))))
+	  (make-instance (pick-class math-ad v "quaternion")
+			 :x (!* x sinA)
+			 :y (!* y sinA)
+			 :z (!* z sinA)
+			 :w (!cos (!* 0.5 a) ))) )))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
