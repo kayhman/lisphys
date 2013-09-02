@@ -7,8 +7,9 @@
    (div :accessor math-div :initarg :div :initform #'/ :allocation :class)
    (sqrt :accessor math-sqrt :initarg :sqrt :initform #'sqrt :allocation :class)
    (sin :accessor math-sin :initarg :sqrt :initform #'sin :allocation :class)
-   (cos :accessor math-cos :initarg :sqrt :initform #'cos :allocation :class))
-)
+   (cos :accessor math-cos :initarg :sqrt :initform #'cos :allocation :class)
+   (zero :accessor math-zero :initform 0 :allocation :class)
+   (unit :accessor math-unit :initform 1 :allocation :class)))
 
 (defclass math-ad (math)
   ((add :initform #'ad-+ :allocation :class)
@@ -17,8 +18,10 @@
    (div :initform #'ad-/ :allocation :class)
    (sqrt :initform #'ad-sqrt :allocation :class)
    (sin :accessor math-sin :initarg :sqrt :initform #'ad-sin :allocation :class)
-   (cos :accessor math-cos :initarg :sqrt :initform #'ad-cos :allocation :class))
-)
+   (cos :accessor math-cos :initarg :sqrt :initform #'ad-cos :allocation :class)
+   (zero :accessor math-zero :initform '(0 0) :allocation :class)
+   (unit :accessor math-unit :initform '(1 0) :allocation :class)))
+
 
 (defmethod is-ad (obj)
   nil)
@@ -30,7 +33,7 @@
   t)
 
 (defmacro with-ad# (obj &body body)
-  `(with-slots ((!+# add) (!-# sub) (!*# mult) (!/# div) (!sqrt# sqrt) (!sin# sin) (!cos# cos)) ,obj
+  `(with-slots ((!+# add) (!-# sub) (!*# mult) (!/# div) (!sqrt# sqrt) (!sin# sin) (!cos# cos) (!zero zero) (!unit unit)) ,obj
      (labels ((!+ (&rest x) (apply !+# x))
 	      (!- (x &rest y) (apply !-# x y))
 	      (!* (x y) (funcall !*# x y))
