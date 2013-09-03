@@ -27,6 +27,7 @@
                (:file "src/lib/twist")
                (:file "src/tests/twist-test")
 	       (:file "src/lib/matrix")
+	       (:file "src/lib/matrixad")
 	       (:file "src/tests/matrix-test")
 	       (:file "src/lib/jacobian")
 	       (:file "src/lib/viewer")
