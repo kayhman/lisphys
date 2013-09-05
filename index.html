@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Lisphys : A multi bodies systems simulator written in lisp and using automatic differentiation to build equations." />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Lisphys</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/kayhman/lisphys">View on GitHub</a>
+
+          <h1 id="project_title">Lisphys</h1>
+          <h2 id="project_tagline">A multi bodies systems simulator written in lisp and using automatic differentiation to build equations.</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/kayhman/lisphys/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/kayhman/lisphys/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h3>
+<a name="lisphys--physical-simulation-using-automatic-differentiation" class="anchor" href="#lisphys--physical-simulation-using-automatic-differentiation"><span class="octicon octicon-link"></span></a>Lisphys : Physical simulation using Automatic Differentiation</h3>
+
+<p>Lisphys is a small project whose main goal is to experiment with Automatic Differentiation. More precisely, it is a kind of proof of concept that Automatic Differentiation can be used to create complex physics engines. </p>
+
+<p>However, Lisphys want to address the following points:</p>
+
+<ul>
+<li>Demonstrate that Automatic Differentiation can ease development of physics engines</li>
+<li>Provide a uniform framework to compute all the various derivative used in physics engines : Stiffness, Damping, Jacobian, Velocity, Acceleration, ...</li>
+<li>Offer a pedagogic tool to discover physics simulation, by letting learner to experiment by themselves.</li>
+</ul><h4>
+<a name="how-can-automatic-differentiation-help-to-write-physics-engine-" class="anchor" href="#how-can-automatic-differentiation-help-to-write-physics-engine-"><span class="octicon octicon-link"></span></a>How can Automatic Differentiation help to write physics engine ?</h4>
+
+<p>When you're designing physics engine for multibodies system, two physical properties are important : position and forces.</p>
+
+<p>All the others significant physical properties can be derived from this two ones :</p>
+
+<ul>
+<li>Velocity is the time derivative of position : v = dp / dt </li>
+<li>Acceleration is the time derivative of velocity, hence, the second time derivative of position :  a = dp / dt^2</li>
+<li>Stiffness is the derivative of force with restect to position : k = df/dp</li>
+<li>Damping is the the derivative of force with respect to velocity : d = df/dv</li>
+<li>Jacobian, as used wot robot control, are the derivative of tge 6D position with respect to the robot degrees of freedom.</li>
+<li>...</li>
+</ul><p>Hence, if you have a formula to describe the positions and forces of, and have the necessary tools to perform Automatic Differentiation, then it becomes easy to write a time integrator based on euler explicit or implicit methods. </p>
+
+<p>And these remarks also stand for fluid simulation, particules simulation, financial simulation, and so on.</p>
+
+<h4>
+<a name="lisphys-for-robotic-simulation" class="anchor" href="#lisphys-for-robotic-simulation"><span class="octicon octicon-link"></span></a>Lisphys for robotic simulation</h4>
+
+<p>To illustrate the use of Automatic Differentiation to write efficiently and easily physics engine, I've decided to implement a robot simulator.</p>
+
+<p>Our robots are modelized using generelized coordinates and a Lagrangian approach. See <a href="www.mls.org">Murray Ly Sastry</a>.
+Hence Lie groups, i.e. SO(3), are used to modelize position, and Lie algebra, so(3) to modelize velicity.</p>
+
+<p>Progressive examples can be found in the <a href="kayhman.github.com/lisphys/src/examples/">examples directory</a>.</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Lisphys maintained by <a href="https://github.com/kayhman">kayhman</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
