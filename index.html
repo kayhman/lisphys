@@ -50,11 +50,11 @@
 <p>All the others significant physical properties can be derived from this two ones :</p>
 
 <ul>
-<li>Velocity is the time derivative of position : v = dp / dt </li>
-<li>Acceleration is the time derivative of velocity, hence, the second time derivative of position :  a = dp / dt^2</li>
-<li>Stiffness is the derivative of force with restect to position : k = df/dp</li>
-<li>Damping is the the derivative of force with respect to velocity : d = df/dv</li>
-<li>Jacobian, as used wot robot control, are the derivative of tge 6D position with respect to the robot degrees of freedom.</li>
+<li>Velocity is the time derivative of position p : v = dp / dt </li>
+<li>Acceleration is the time derivative of velocity, hence, the second time derivative of position p :  a = dp / dt^2</li>
+<li>Stiffness is the derivative of force f with restect to position p : k = df/dp</li>
+<li>Damping is the the derivative of force f with respect to velocity v : d = df/dv</li>
+<li>Jacobian, as used wot robot control, are the derivative of the 6D position with respect to the robot degrees of freedom.</li>
 <li>...</li>
 </ul><p>Hence, if you have a formula to describe the positions and forces of, and have the necessary tools to perform Automatic Differentiation, then it becomes easy to write a time integrator based on euler explicit or implicit methods. </p>
 
@@ -65,10 +65,26 @@
 
 <p>To illustrate the use of Automatic Differentiation to write efficiently and easily physics engine, I've decided to implement a robot simulator.</p>
 
-<p>Our robots are modelized using generelized coordinates and a Lagrangian approach. See <a href="www.mls.org">Murray Ly Sastry</a>.
-Hence Lie groups, i.e. SO(3), are used to modelize position, and Lie algebra, so(3) to modelize velicity.</p>
+<p>Our robots are modelized using generelized coordinates and a Lagrangian approach. See <a href="https://www.google.fr/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;ved=0CCwQFjAA&amp;url=http%3A%2F%2Fwww.cds.caltech.edu%2F%7Emurray%2Fbooks%2FMLS%2Fpdf%2Fmls94-complete.pdf&amp;ei=6sQpUsG_DoWp7Qbb4oGwAQ&amp;usg=AFQjCNF7UfyyR12eG5iyqqikSzEJMsRZew&amp;sig2=iqZtwiDWEnXwjZ-vo-Vdiw&amp;bvm=bv.51773540,d.ZGU">Murray Ly Sastry</a>.</p>
 
-<p>Progressive examples can be found in the <a href="kayhman.github.com/lisphys/src/examples/">examples directory</a>.</p>
+<p>Hence Lie groups, i.e. SO(3), are used to modelize position, and Lie algebra, so(3) to modelize velicity.</p>
+
+<h4>
+<a name="examples" class="anchor" href="#examples"><span class="octicon octicon-link"></span></a>Examples</h4>
+
+<p>Progressive examples can be found in the <a href="https://github.com/kayhman/lisphys/tree/master/src/examples">examples directory</a>.</p>
+
+<h5>
+<a name="features" class="anchor" href="#features"><span class="octicon octicon-link"></span></a>Features</h5>
+
+<p>In order to achieve its goal, Lisphys provides the followings utilities:</p>
+
+<ul>
+<li>Automatic Differentiation, with Jacobian computation and support for 3D vectors and matrices</li>
+<li>3D vector class, with basic operation on it : cross product, dot product, norm, ...</li>
+<li>Matrix class, with arithmetic operation and LU factorisation.</li>
+<li>Twist, i.e. element of se(3) and Displacement, i.e. element of SE(3) classes, used to describe rigid bodies position and velocities.</li>
+</ul>
       </section>
     </div>
 
