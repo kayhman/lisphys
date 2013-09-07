@@ -38,6 +38,7 @@
 (defun g_l3_s (q1 q2 q3)
   (.* (.exp (.* tw1 q1)) (.* (.* (.exp (.* tw2 q2)) (.exp (.* tw3 q3))) g_l3_s_0)))
 
+(defvar **gravity** #m((0) (0) (1) (0) (0) (0)) )
 
 (setq m1 (ball-inertia 1.0 0.3))
 (setq m2 (ball-inertia 1.0 0.3))
@@ -52,3 +53,11 @@
 (setq mg3 (.* (val Jt3) (.* m1 (val (transpose Jt3)))))
 
 (setq mg (.+ (.+ mg1 mg2) mg3))
+
+
+;; Time Integration 
+(multiple-value-bind  (L U P) (lu (val mg))
+  (let ((x #v(0 0 0)))
+    (progn
+      (solve P L U x **gravity**)
+      (print x))))
