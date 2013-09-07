@@ -33,9 +33,9 @@
 
 (deftest test-lu (MatrixSuite)
   (let ((m1 #m((1 3 5) (2 4 7) (1 1 0)))
-	(y (make-array 3 :initial-element 0. ))
-	(x (make-array 3 :initial-element 0. ))
-	(b #(1 2 3))
+	(y #m( (0) (0) (0)))
+	(x #m( (0) (0) (0)))
+	(b #m((1) (2) (3)))
 	)
     (multiple-value-bind  (L U P) (lu m1)
       (progn
@@ -53,18 +53,16 @@
 				   )) (matrix-val P)))
 	(forward-substitution L y b)
 	(backward-substitution U x y)
-	(assert-equal t (equalp  (matrix-val 
-				  (.* P 
-				      (.* m1 
-					  (make-instance 'matrix :nrows 3 :ncols 1 :row-major x))))
-				 (matrix-val (make-instance 'matrixad :nrows 3 :ncols 1 :row-major b))))))))
+	(assert-equal t (equalp  (matrix-val (.* P (.* m1 x)))
+				 (matrix-val b)))))))
+
 
 
 (deftest test-lu-ad (MatrixSuite)
   (let ((m1 #m(('(1 0) '(3 0) '(5 0)) ('(2 0) '(4 0) '(7 0)) ('(1 0) '(1 0) '(0 0)) ad))
-	(y (make-array 3 :initial-element '(0. 0.) ))
-	(x (make-array 3 :initial-element '(0. 0.) ))
-	(b #((1 0) (2 0) (3 0)))
+	(y #m(('(0 0)) ('(0 0)) ('(0 0)) ad))
+	(x #m(('(0 0)) ('(0 0)) ('(0 0)) ad))
+	(b #m(('(1 0)) ('(2 0)) ('(3 0)) ad))
 	)
     (multiple-value-bind  (L U P) (lu m1)
       (progn
@@ -82,11 +80,8 @@
 				 (matrix-val P)))
 	(forward-substitution L y b)
 	(backward-substitution U x y)
-	(assert-equal t (equalp  (matrix-val 
-				  (.* P 
-				      (.* m1 
-					  (make-instance 'matrixad :nrows 3 :ncols 1 :row-major x))))
-				 (matrix-val (make-instance 'matrixad :nrows 3 :ncols 1 :row-major b))))
-	))))
+	(assert-equal t (equalp  (matrix-val (.* P (.* m1 x)))
+				 (matrix-val b)))))))
+
 
 (run-suite 'MatrixSuite)

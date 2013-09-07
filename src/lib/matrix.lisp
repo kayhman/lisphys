@@ -198,24 +198,24 @@
 (defun forward-substitution (L y b)
   (with-ad L 
     (progn 
-      (fill y !zero)
+      (fill (matrix-row-major y) !zero)
       (let* ((n (matrix-ncols L)))
 	(loop for i from 0 to (- n 1) do
-	     (let ((sub-r (make-array i :displaced-to (row L i) :element-type (array-element-type y)))
-		   (sub-y (make-array i :displaced-to y :element-type (array-element-type y) )))
-	       (setf (aref y i) (!- (aref b i) (reduce #'!+ (map 'vector #'!* sub-r sub-y) )))))))))
+	     (let ((sub-r (make-array i :displaced-to (row L i) :element-type (array-element-type (matrix-val y))))
+		   (sub-y (make-array i :displaced-to (matrix-val y) :element-type (array-element-type (matrix-val y)) )))
+	       (setf (mref y i 0) (!- (mref b i 0) (reduce #'!+ (map 'vector #'!* sub-r sub-y) )))))))))
 
 (defun backward-substitution (U x y)
   (with-ad U 
     (progn
-      (fill x !zero)
+      (fill (matrix-row-major x) !zero)
       (let* ((n (matrix-ncols U)))
 	(loop for i from (- n 1) downto 0 do
 	     (let ((sub-r (make-array (- n (+ i 1)) :displaced-index-offset (+ i 1) 
-				      :displaced-to (row U i) :element-type (array-element-type x)))
+				      :displaced-to (row U i) :element-type (array-element-type (matrix-val x))))
 		   (sub-x (make-array (- n (+ i 1)) :displaced-index-offset (+ i 1)
-				      :displaced-to x :element-type (array-element-type x) )))
-	       (setf (aref x i) (!/ (!- (aref y i) (reduce #'!+ (map 'vector #'!* sub-r sub-x))) (mref U i i)))))))))
+				      :displaced-to (matrix-val x) :element-type (array-element-type (matrix-val x)) )))
+	       (setf (mref x i 0) (!/ (!- (mref y i 0) (reduce #'!+ (map 'vector #'!* sub-r sub-x))) (mref U i i)))))))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -258,4 +258,8 @@
        (format t "~a : ~a ~a ~% ~a ~%-- ~%" (type-of m) nrows ncols val)))
 
 (defun solve (P L U x b)
-  nil)
+  (let ((y (make-instance 'matrix :nrows (matrix-nrows x) :ncols (matrix-ncols x)))) 
+  (progn
+    (forward-substitution L y b)
+    (backward-substitution U x y)
+    )))
