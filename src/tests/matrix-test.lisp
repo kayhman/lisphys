@@ -54,6 +54,9 @@
 	(forward-substitution L y b)
 	(backward-substitution U x y)
 	(assert-equal t (equalp  (matrix-val (.* P (.* m1 x)))
+				 (matrix-val b)))
+	(solve P L U  x b)
+	(assert-equal t (equalp  (matrix-val (.* P (.* m1 x)))
 				 (matrix-val b)))))))
 
 
@@ -81,7 +84,11 @@
 	(forward-substitution L y b)
 	(backward-substitution U x y)
 	(assert-equal t (equalp  (matrix-val (.* P (.* m1 x)))
+				 (matrix-val b)))
+	(solve P L U x b)
+	(assert-equal t (equalp  (matrix-val (.* P (.* m1 x)))
 				 (matrix-val b)))))))
+
 
 
 (run-suite 'MatrixSuite)
