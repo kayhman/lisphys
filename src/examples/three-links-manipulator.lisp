@@ -54,6 +54,7 @@
       (v1 0.)
       (v2 0.)
       (v3 0.)
+      (ti 0.0)
       Jt1 Jt2 Jt3 mg1 mg2 mg3 mg rhs)
   (defun integrate (dt)
     (progn
@@ -72,6 +73,8 @@
       (multiple-value-bind  (L U P) (lu (val mg))
 	(let ((x #m((0) (0) (0))))
 	  (progn
+	    (with-open-file (stream "traj.txt" :direction :output :if-exists :append)
+	      (format stream "gravity : ~a ~a ~a ~%" (mref rhs 0 0 ) (mref rhs 1 0 ) (mref rhs 2 0 )))
 	    (solve P L U x rhs)
 	    (setf v1 (+ v1 (* dt (mref x 0 0)))) 
 	    (setf v2 (+ v2 (* dt (mref x 1 0))))
@@ -79,13 +82,13 @@
 	    (setf x1 (+ x1 (* dt v1))) 
 	    (setf x2 (+ x2 (* dt v2))) 
 	    (setf x3 (+ x3 (* dt v3)))
+	    (setf ti (+ ti dt))
 	    )))
-      (with-open-file (stream "traj.txt")
-	(format stream "~a ~a ~a ~a ~%" (read-line stream)))
-      (print (list x1 x2 x3)))))
+      (with-open-file (stream "traj.txt" :direction :output :if-exists :append)
+	(format stream "~a ~a ~a ~a ~%" ti x1 x2 x3)))))
 
 
-(loop for i from 0 to 10000 do (integrate 1e-3))
+(loop for i from 0 to 1000 do (integrate 1e-3))
 
 ;; Time Integration 
 
