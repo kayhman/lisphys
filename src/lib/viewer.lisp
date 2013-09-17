@@ -78,7 +78,7 @@
       (gl:matrix-mode :projection)
       (gl:load-identity)
       (glu:perspective 50 (/ +window-height+ +window-width+) 1.0 10.0)
-      (glu:look-at -2 2 4 
+      (glu:look-at -2 0 -4 
                     0.5 0.5 0.5 
                     0 1 0)
  
@@ -99,16 +99,13 @@
                  :lighting :light0 :light1)
  
       (gl:clear :color-buffer :depth-buffer)
-      (draw-frame rotx roty rotz)
+      ;; (draw-frame rotx roty rotz)
       (sdl:update-display)
  
       (sdl:with-events ()
         (:quit-event () t)
         (:video-expose-event () (sdl:update-display))
         (:idle
-          (setq rotx (mod (+ rotx 2.5) 360.0))
-          (setq roty (mod (+ roty 0.7) 360.0))
-          (setq rotz (mod (+ rotz 4.4) 360.0))
           (gl:clear :color-buffer :depth-buffer)
           (draw-frame rotx roty rotz)
           (sdl:update-display))))))
