@@ -50,7 +50,17 @@
   (gl:rotate rotz 0 0 1)
   (gl:translate -0.5 -0.5 -0.5)
   (draw-figure +cube-vertices+ +cube-faces+)
-  (gl:pop-matrix))
+  (gl:pop-matrix)
+  
+  (gl:push-matrix)
+  (gl:translate 0.5 0.5 0.5)
+  (gl:rotate rotx 1 0 0)
+  (gl:rotate roty 0 1 0)
+  (gl:rotate rotz 0 0 1)
+  (gl:translate 0.5 0.5 0.5)
+  (draw-figure +cube-vertices+ +cube-faces+)
+  (gl:pop-matrix)
+  )
    
  
 (defun start ()

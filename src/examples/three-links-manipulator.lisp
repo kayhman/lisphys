@@ -44,10 +44,6 @@
 (setq m2 (ball-inertia 1.0 0.3))
 (setq m3 (ball-inertia 1.0 0.3))
 
-(setq x1 0.0)
-(setq x2 0.0)
-(setq x3 0.0)
-
 (let ((x1 0.)
       (x2 0.)
       (x3 0.)
@@ -85,8 +81,20 @@
 	    (setf ti (+ ti dt))
 	    )))
       (with-open-file (stream "traj.txt" :direction :output :if-exists :append)
-	(format stream "~a ~a ~a ~a ~%" ti x1 x2 x3)))))
+	(format stream "~a ~a ~a ~a ~%" ti x1 x2 x3)
+	(values x1 x2 x3)))))
 
+(defun draw-cube (x y z)
+  (gl:push-matrix)
+  (gl:translate x y r)
+  (draw-figure +cube-vertices+ +cube-faces+)
+  (gl:pop-matrix))
+
+(defun draw-frame (a b c)
+	    (multiple-value-bind (x1 x2 x3) (integrate 1e-3) 
+	      (gl:matrix-mode :modelview)
+	      
+	      (print (list "xs -> " (pos (g_l1_s x1 x2 x3)) (pos (g_l2_s x1 x2 x3)) (pos (g_l3_s x1 x2 x3))))))
 
 (loop for i from 0 to 1000 do (integrate 1e-3))
 
