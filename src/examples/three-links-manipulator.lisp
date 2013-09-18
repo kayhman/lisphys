@@ -77,6 +77,7 @@
 	    (setf x2 (+ x2 (* dt v2))) 
 	    (setf x3 (+ x3 (* dt v3)))
 	    (setf ti (+ ti dt))
+	    (print (list "pos --->>> " x1 x2 x3))
 	    (values x1 x2 x3)))))))
 
 
@@ -88,13 +89,23 @@
 
 (defun draw-frame (a b c)
   (declare (ignore a b c))
-  (multiple-value-bind (x1 x2 x3) (integrate 1e-3) 
+  (multiple-value-bind (x1 x2 x3) (integrate 1e-1) 
     (let ((p1 (pos (g_l1_s x1 x2 x3)))
 	  (p2 (pos (g_l2_s x1 x2 x3)))
 	  (p3 (pos (g_l3_s x1 x2 x3))))
-      (draw-cube (val (vector3-x p1)) (val (vector3-y p1)) (val (vector3-z p1)))
-      (draw-cube (val (vector3-x p2)) (val (vector3-y p2)) (val (vector3-z p2)))
-      (draw-cube (val (vector3-x p3)) (val (vector3-y p3)) (val (vector3-z p3))))))
+      (print (list "p1 ->->->-> " p1))
+      (print (list "p2 ->->->-> " p2))
+      (print (list "p3 ->->->-> " p3))
+      (draw-cube 0 0 0)
+      (draw-cube 
+       (val (vector3-x p1)) (val (vector3-y p1)) (val (vector3-z p1))
+       )
+      (draw-cube 
+       (val (vector3-x p2)) (val (vector3-y p2)) (val (vector3-z p2))
+       )
+      (draw-cube
+       (val (vector3-x p3)) (val (vector3-y p3)) (val (vector3-z p3))
+       ))))
 
 
 (loop for i from 0 to 1000 do (integrate 1e-3))

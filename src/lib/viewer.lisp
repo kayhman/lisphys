@@ -10,13 +10,13 @@
  
 (defconstant +cube-vertices+
   #(#(0 0 0)
-    #(0 1 0)
-    #(1 1 0)
-    #(1 0 0)
-    #(0 0 1)
-    #(0 1 1)
-    #(1 1 1)
-    #(1 0 1)))
+    #(0 .5 0)
+    #(.5 .5 0)
+    #(.5 0 0)
+    #(0 0 .5)
+    #(0 .5 .5)
+    #(.5 .5 .5)
+    #(.5 0 .5)))
  
 (defconstant +cube-faces+
   '((#(4 7 6 5) #(0 0 1))
@@ -78,9 +78,9 @@
       (gl:matrix-mode :projection)
       (gl:load-identity)
       (glu:perspective 50 (/ +window-height+ +window-width+) 1.0 10.0)
-      (glu:look-at -2 0 -4 
-                    0.5 0.5 0.5 
-                    0 1 0)
+      (glu:look-at -5 0 0 
+		   0. 0. 0. 
+		   0 1 0)
  
       (gl:matrix-mode :modelview)
       (gl:load-identity)
