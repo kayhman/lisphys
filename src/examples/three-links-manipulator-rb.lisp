@@ -30,9 +30,23 @@
 		(0 0 0 1 ad)))
 
 
+(setq g_l2_l1_0 #d ((0 r1 r0 ad)
+		    (0 0 0 1 ad)))
+(setq g_l3_l2_0 #d ((0 (+ r1 r2) 0 ad)
+		    (0 0 0 1 ad)))
+
+(make-hinge h1 #v(0 0 1 ad) #v(0 0 r0 ad))
+(make-hinge h2 #v((- 1) 0 0 ad) #v(0 0 r0 ad))
+(make-hinge h3 #v((- 1) 0 0 ad) #v(0 r1 0 ad))
+
+(add-rigid-body root h1 g_l1_s_0 1.0 rb1)
+(add-rigid-body rb1 h2 g_l2_l1_0 1.0 rb2)
+(add-rigid-body rb2 h3 g_l3_l2_0 1.0 rb3)
+
+
 
 (defun g_l1_s (q1 q2 q3)
-  (.* (.exp (.* tw1 q1)) g_l1_s_0 ))
+  (.* (h1 q1) g_l1_s_0 ))
 
 (defun g_l2_s (q1 q2 q3)
   (.* (.exp (.* tw1 q1)) (.* (.exp (.* tw2 q2)) g_l2_s_0)))
@@ -40,38 +54,21 @@
 (defun g_l3_s (q1 q2 q3)
   (.* (.exp (.* tw1 q1)) (.* (.* (.exp (.* tw2 q2)) (.exp (.* tw3 q3))) g_l3_s_0)))
 
-(setq tw2-rb #t((0 (- r0) 0 ad) 
-	     ((- 1) 0 0 ad)))
-
-(setq g_l2_l1_0 #d ((0 r1 r0 ad)
-		(0 0 0 1 ad)))
-
-(setq tw3-rb #t((0 0 r1 ad) 
-	     ((- 1) 0 0 ad)))
-
-(setq g_l3_l2_0 #d ((0 (+ r1 r2) 0 ad)
-		(0 0 0 1 ad)))
-
-(defun g_l2_s-rb (q1 q2 q3)
-  (.* (.* (g_l1_s q1 q2 q3) (.exp (.* tw2-rb q2))) g_l2_l1_0))
-
-(defun g_l3_s-rb (q1 q2 q3)
-  (.* (.* (g_l2_s-rb q1 q2 q3) (.exp (.* tw3-rb q3))) g_l3_l2_0)) 
 
 
-(defmacro make-hinge (hinge-name axis center)
-  `(defun ,hinge-name (q)
-     (let ((tw (make-instance 'twist :lin (cross ,center ,axis) :ang ,axis)))
-      (.exp (.* tw q)))))
-
-(make-hinge h2 #v((- 1) 0 0 ad) #v(0 0 r0 ad))
-(make-hinge h3 #v((- 1) 0 0 ad) #v(0 r1 0 ad))
+(defun g_l1_s# (q1 q2 q3)
+  (.* (.exp (.* tw1 q1)) g_l1_s_0 ))
 
 (defun g_l2_s# (q1 q2 q3)
   (.* (.* (g_l1_s q1 q2 q3) (h2 q2)) g_l2_l1_0))
 
 (defun g_l3_s# (q1 q2 q3)
-  (.* (.* (g_l2_s# q1 q2 q3) (h3 q3)) g_l3_l2_0)) 
+  (.* (.* (g_l2_s# q1 q2 q3) (h3 q3)) g_l3_l2_0))
+
+(defmacro add-rigid-body (prev-rb joint H_j_i name)
+  `(defun ,(symbolicate name "-position") (q)
+     (.* (.* ,(symbolicate ,prev-rb "-position") (joint q)) ,H_j_i)))
+
 
 
 (defconstant **gravity** #m((0) (0) ((- 1)) (0) (0) (0)) )

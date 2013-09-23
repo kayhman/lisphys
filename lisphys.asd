@@ -32,6 +32,8 @@
 	       (:file "src/tests/matrix-test")
 	       (:file "src/lib/jacobian")
 	       (:file "src/lib/viewer")
+	       (:file "src/lib/rigid-body-api")
+	       (:file "src/tests/rigid-body-api-test")
 	       (:file "src/examples/elbow-manipulator")
-               (:file "src/lib/lisphys")))
+	       (:file "src/lib/lisphys")))
 
