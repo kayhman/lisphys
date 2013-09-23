@@ -108,14 +108,19 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defmethod der ((v vector3))
   (with-slots (x y z) v 
-	(progn
-	  (print x)
-	  (print y)
-	  (print z)
-	  (make-instance (pick-class math-ad v "vector3")
-			 :x (der x)
-			 :y (der y)
-			 :z (der z)))))
+    (make-instance 'vector3
+		   :x (der x)
+		   :y (der y)
+		   :z (der z))))
+
+
+(defmethod val ((v vector3))
+  (with-slots (x y z) v 
+    (make-instance 'vector3
+		   :x (val x)
+		   :y (val y)
+		   :z (val z))))
+
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
