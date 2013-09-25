@@ -65,12 +65,6 @@
 (defun g_l3_s# (q1 q2 q3)
   (.* (.* (g_l2_s# q1 q2 q3) (h3 q3)) g_l3_l2_0))
 
-(defmacro add-rigid-body (prev-rb joint H_j_i name)
-  `(defun ,(symbolicate name "-position") (q)
-     (.* (.* ,(symbolicate ,prev-rb "-position") (joint q)) ,H_j_i)))
-
-
-
 (defconstant **gravity** #m((0) (0) ((- 1)) (0) (0) (0)) )
 
 (setf m1 (ball-inertia 1.0 0.3))
