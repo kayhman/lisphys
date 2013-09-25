@@ -87,10 +87,13 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defmethod row ((m matrix)  (i integer))
   (with-slots (nrows ncols val) m
-    (make-array ncols 
-		:displaced-to val
-		:displaced-index-offset (* i ncols)
-		:element-type (array-element-type val))))
+    (make-instance 'matrix 
+		   :nrows 1
+		   :ncols ncols
+		   :row-major (make-array ncols 
+				    :displaced-to val
+				    :displaced-index-offset (* i ncols)
+				    :element-type (array-element-type val)))))
 
 (defmethod (setf row) ((tw twist)  (m matrix) (i integer))
   "Set the value of row i element with twist value, starting with linear"
@@ -107,11 +110,10 @@
   (with-slots (nrows ncols val) m
     (let ((res (make-array nrows 
 			   :element-type (array-element-type val))))
-      (progn
-	(loop for i from 0 to (- nrows 1) do
-	     (setf (aref res i ) (mref m i j )))
-	res
-	))))
+      (loop for i from 0 to (- nrows 1) do
+	   (setf (aref res i ) (mref m i j )))
+      (make-instance 'matrix :nrows nrows :ncols 1 :row-major res))))
+
 
 ;See http://rosettacode.org/wiki/LU_decomposition for initial lu code.
 
