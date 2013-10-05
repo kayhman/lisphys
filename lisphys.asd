@@ -35,5 +35,6 @@
 	       (:file "src/lib/rigid-body-api")
 	       (:file "src/tests/rigid-body-api-test")
 	       (:file "src/examples/elbow-manipulator")
+	       (:file "src/examples/three-links-manipulator-rb")
 	       (:file "src/lib/lisphys")))
 

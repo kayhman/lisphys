@@ -89,7 +89,7 @@
 
 (defun draw-frame (a b c)
   (declare (ignore a b c))
-  (multiple-value-bind (x1 x2 x3) (integrate 1e-1) 
+  (multiple-value-bind (x1 x2 x3) (integrate 1e-2) 
     (let ((p1 (pos (g_l1_s x1 x2 x3)))
 	  (p2 (pos (g_l2_s x1 x2 x3)))
 	  (p3 (pos (g_l3_s x1 x2 x3))))
@@ -106,9 +106,5 @@
       (draw-cube
        (val (vector3-x p3)) (val (vector3-y p3)) (val (vector3-z p3))
        ))))
-
-
-(loop for i from 0 to 1000 do (integrate 1e-3))
-
 ;; Time Integration 
 

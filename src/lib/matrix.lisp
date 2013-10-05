@@ -78,7 +78,7 @@
 	      (loop for i from 0 to (- (matrix-nrows res) 1) do
 		   (loop for j from 0 to (- (matrix-ncols res) 1) do
 			(setf (mref res i j )
-			      (reduce #'!+ (map 'vector #'!* (row m1 i) (col m2 j))))))
+			      (reduce #'!+ (map 'vector #'!* (matrix-row-major (row m1 i)) (matrix-row-major (col m2 j)))))))
 	      res))))))
 
 
@@ -149,9 +149,9 @@
     (let* ((n (matrix-ncols A))
 	   (row (make-array n :initial-element !zero)))
       (loop for j from 0 to (- n 1) do
-	   (setf (aref row j) (mref A l j))
+	   (setf (mref row 0 j) (mref A l j))
 	   (setf (mref A l j) (mref A k j))
-	   (setf (mref A k j) (aref row j))))))
+	   (setf (mref A k j) (mref row j 0))))))
 
 ;; Creates the pivoting matrix for A.
 (defun pivotize (A)
@@ -203,7 +203,7 @@
       (fill (matrix-row-major y) !zero)
       (let* ((n (matrix-ncols L)))
 	(loop for i from 0 to (- n 1) do
-	     (let ((sub-r (make-array i :displaced-to (row L i) :element-type (array-element-type (matrix-val y))))
+	     (let ((sub-r (make-array i :displaced-to (matrix-row-major (row L i)) :element-type (array-element-type (matrix-val y))))
 		   (sub-y (make-array i :displaced-to (matrix-val y) :element-type (array-element-type (matrix-val y)) )))
 	       (setf (mref y i 0) (!- (mref b i 0) (reduce #'!+ (map 'vector #'!* sub-r sub-y) )))))))))
 
@@ -214,7 +214,7 @@
       (let* ((n (matrix-ncols U)))
 	(loop for i from (- n 1) downto 0 do
 	     (let ((sub-r (make-array (- n (+ i 1)) :displaced-index-offset (+ i 1) 
-				      :displaced-to (row U i) :element-type (array-element-type (matrix-val x))))
+				      :displaced-to (matrix-row-major (row U i)) :element-type (array-element-type (matrix-val x))))
 		   (sub-x (make-array (- n (+ i 1)) :displaced-index-offset (+ i 1)
 				      :displaced-to (matrix-val x) :element-type (array-element-type (matrix-val x)) )))
 	       (setf (mref x i 0) (!/ (!- (mref y i 0) (reduce #'!+ (map 'vector #'!* sub-r sub-x))) (mref U i i)))))))))

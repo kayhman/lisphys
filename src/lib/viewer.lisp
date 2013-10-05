@@ -77,7 +77,7 @@
       (gl:viewport 0 0 +window-width+ +window-height+)
       (gl:matrix-mode :projection)
       (gl:load-identity)
-      (glu:perspective 50 (/ +window-height+ +window-width+) 1.0 10.0)
+      (glu:perspective 80 (/ +window-height+ +window-width+) 1.0 10.0)
       (glu:look-at -5 0 0 
 		   0. 0. 0. 
 		   0 1 0)
