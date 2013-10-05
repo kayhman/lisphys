@@ -149,9 +149,9 @@
     (let* ((n (matrix-ncols A))
 	   (row (make-array n :initial-element !zero)))
       (loop for j from 0 to (- n 1) do
-	   (setf (mref row 0 j) (mref A l j))
+	   (setf (aref row j) (mref A l j))
 	   (setf (mref A l j) (mref A k j))
-	   (setf (mref A k j) (mref row j 0))))))
+	   (setf (mref A k j) (aref row j))))))
 
 ;; Creates the pivoting matrix for A.
 (defun pivotize (A)
